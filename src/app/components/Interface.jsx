@@ -310,7 +310,7 @@ function ProjectsSection() {
                   <div className="absolute inset-0 flex items-end m-3 card-img_hover gap-1 flex-col">
                     <div
                       onClick={() => window.open(project.url, "_blank")}
-                      className="bg-black w-10 h-10 rounded-full flex justify-center items-center cursor-pointer"
+                      className="bg-black w-10 h-10 rounded-full flex justify-center items-center cursor-pointer hover:bg-gray-600"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -330,7 +330,7 @@ function ProjectsSection() {
                     {project.github ? (
                       <div
                         onClick={() => window.open(project.github, "_blank")}
-                        className="bg-black w-10 h-10 rounded-full flex justify-center items-center cursor-pointer"
+                        className="bg-black w-10 h-10 rounded-full flex justify-center items-center cursor-pointer hover:bg-gray-600"
                       >
                         <div className="relative w-10 h-10">
                           <Image src={github.src} alt={project.name} fill />
@@ -398,7 +398,7 @@ function BlogSection() {
         {posts.map((post) => (
           <motion.div
             key={post.title}
-            className="pt-10 pb-10 border-t-4 w-full flex items-center justify-between gap-40"
+            className="pt-10 pb-10 border-t-4 w-full flex items-center justify-between gap-[20px] sm:gap-40"
             initial={{
               opacity: 0,
               y: 25,
@@ -413,7 +413,7 @@ function BlogSection() {
             }}
           >
             <div className="flex flex-col gap-3">
-              <div className="text-3xl">{post.title}</div>
+              <div className="sm:text-3xl text-[18px]">{post.title}</div>
               <div className="flex gap-5">
                 {post.tags.map((tag) => (
                   <div className="text-emerald-400" key={tag.name}>
@@ -433,7 +433,7 @@ function BlogSection() {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-[20px] h-[20px]"
               >
                 <path
                   strokeLinecap="round"
@@ -450,87 +450,153 @@ function BlogSection() {
 }
 
 function ContactSection() {
+  const history = [
+    {
+      title: "경희대학교 졸업",
+      titleEn: "Kyung Hee University",
+      desc: "지리학 학사",
+      descEn: "B.S. Geography",
+    },
+    {
+      title: "멋쟁이사자처럼",
+      titleEn: "LIKELION",
+      desc: "프론트엔드 스쿨 3기 수료",
+      descEn: "Certificated front-end education program",
+    },
+    {
+      title: "정보처리기사 자격증 취득",
+      titleEn: "Certificated Engineer Information Processing",
+      desc: "한국산업인력공단",
+      descEn: "From Human Resources Development Service of Korea",
+    },
+    {
+      title: "`React, Hook 들어오네!?` 책 출판",
+      titleEn: "E-Book co-writer",
+      desc: "ISBN-9791188786664",
+      descEn: "introduce React Hook",
+    },
+  ];
   return (
     <Section>
       <h2 className="text-5xl font-bold">Contact</h2>
-      <motion.div
-        className="mt-8 p-8 rounded-md w-96 max-w-full"
-        initial={{
-          opacity: 0,
-          y: 25,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 1,
-          delay: 1.5,
-        }}
-      >
-        <Tilt
-          glareEnable={true}
-          glareMaxOpacity={0.8}
-          glareColor="#ffffff"
-          glarePosition="bottom"
-          glareBorderRadius="20px"
-          className="bg-white/40 p-5 rounded-2xl sm:w-[350px] sm:h-[490px] w-[40vw] h-[56vw] flex flex-col items-center border-white border-2 justify-center"
-        >
-          <div className="bg-gray-800 w-[24vw] h-[24vw] sm:w-[200px] sm:h-[200px] rounded-full flex justify-center items-center">
-            <div className="relative w-[24vw] h-[24vw] sm:w-[200px] sm:h-[200px]">
-              <Image
-                src={profile.src}
-                alt="프로필_사진"
-                className="w-full h-full object-cover rounded-full"
-                fill
-              />
-            </div>
-          </div>
-          <div className="sm:text-3xl text-[22px] mt-4">Kang Pung_yun</div>
-          <div className="sm:text-xl text-[16px] text-gray-300">
-            Web Developer
-          </div>
-          <div
-            className="sm:text-l text-[12px] text-gray-100 mt-2 hover:text-emerald-400 cursor-pointer"
-            onClick={() => {
-              navigator.clipboard.writeText("zkdvnd@naver.com");
-              alert("이메일 주소가 복사되었습니다(Email address copied)");
+      <div className="overflow-x-hidden flex w-[90vw]">
+        <div className="flex gap-[30px] flex-initial overflow-x-scroll w-full">
+          <motion.div
+            className="mt-8 p-8 rounded-md w-96 max-w-full"
+            initial={{
+              opacity: 0,
+              x: -25,
+            }}
+            whileInView={{
+              opacity: 1,
+              x: 0,
+            }}
+            transition={{
+              duration: 1,
+              delay: 1.5,
             }}
           >
-            zkdvnd@naver.com
-          </div>
-          <div className="sm:mt-6 mt-3 flex gap-2">
-            <div
-              className="sm:w-12 sm:h-12 w-[5vh] h-[5vh] bg-gray-600 rounded-full hover:bg-black cursor-pointer"
-              onClick={() =>
-                window.open("https://github.com/KANGPUNGYUN", "_blank")
-              }
+            <Tilt
+              glareEnable={true}
+              glareMaxOpacity={0.8}
+              glareColor="#ffffff"
+              glarePosition="bottom"
+              glareBorderRadius="20px"
+              className="bg-white/40 p-5 rounded-2xl w-[350px] h-[490px] flex flex-col items-center border-white border-2 justify-center"
             >
-              <div className="relative sm:w-12 sm:h-12 w-[5vh] h-[5vh] p-1">
-                <Image src={github.src} alt="github url" fill sizes="500px" />
+              <div className="bg-gray-800 w-[200px] h-[200px] rounded-full flex justify-center items-center">
+                <div className="relative w-[200px] h-[200px]">
+                  <Image
+                    src={profile.src}
+                    alt="프로필_사진"
+                    className="w-full h-full object-cover rounded-full"
+                    fill
+                  />
+                </div>
               </div>
-            </div>
-            <div
-              className="sm:w-12 sm:h-12 w-[5vh] h-[5vh] bg-gray-600 rounded-full hover:bg-blue-600 cursor-pointer"
-              onClick={() =>
-                window.open(
-                  "https://www.linkedin.com/in/pung-yun-kang-b2677a212/",
-                  "_blank"
-                )
-              }
-            >
-              <div className="relative sm:w-12 sm:h-12 w-[5vh] h-[5vh]">
-                <Image
-                  src={linkedIn.src}
-                  alt="linkedIn url"
-                  fill
-                  sizes="500px"
-                />
+              <div className="text-3xl mt-4">Kang Pung_yun</div>
+              <div className="text-xl text-gray-300">Web Developer</div>
+              <div
+                className="text-l text-gray-100 mt-2 hover:text-emerald-400 cursor-pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText("zkdvnd@naver.com");
+                  alert("이메일 주소가 복사되었습니다(Email address copied)");
+                }}
+              >
+                zkdvnd@naver.com
               </div>
-            </div>
-          </div>
-        </Tilt>
-      </motion.div>
+              <div className="mt-3 flex gap-2">
+                <div
+                  className="w-12 h-12 bg-gray-600 rounded-full hover:bg-black cursor-pointer"
+                  onClick={() =>
+                    window.open("https://github.com/KANGPUNGYUN", "_blank")
+                  }
+                >
+                  <div className="relative w-12 h-12 p-1">
+                    <Image
+                      src={github.src}
+                      alt="github url"
+                      fill
+                      sizes="500px"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="w-12 h-12 bg-gray-600 rounded-full hover:bg-blue-600 cursor-pointer"
+                  onClick={() =>
+                    window.open(
+                      "https://www.linkedin.com/in/pung-yun-kang-b2677a212/",
+                      "_blank"
+                    )
+                  }
+                >
+                  <div className="relative w-12 h-12">
+                    <Image
+                      src={linkedIn.src}
+                      alt="linkedIn url"
+                      fill
+                      sizes="500px"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Tilt>
+          </motion.div>
+          <motion.div
+            className="mt-16 p-8 rounded-2xl bg-white/80 w-[800px] h-[490px] text-black whitespace-nowrap"
+            initial={{
+              opacity: 0,
+              x: 25,
+            }}
+            whileInView={{
+              opacity: 1,
+              x: 0,
+            }}
+            transition={{
+              duration: 1,
+              delay: 1.5,
+            }}
+          >
+            <h3 className="text-3xl font-bold mb-6">History</h3>
+            {history.map((history) => (
+              <div key={history.title} className="mt-4 ml-3">
+                <div className="flex">
+                  <h3 className="text-2xl font-bold">{history.title}</h3>
+                  <h4 className="text-xl ml-3 text-gray-600">
+                    {history.titleEn}
+                  </h4>
+                </div>
+                <div className="flex">
+                  <p className="text-xl text-gray-500">{history.desc}</p>
+                  <span className="text-xl ml-3 text-gray-400">
+                    {history.descEn}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
     </Section>
   );
 }
