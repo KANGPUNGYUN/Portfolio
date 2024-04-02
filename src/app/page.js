@@ -34,7 +34,7 @@ export default function Home() {
           style={{ width: "100vw", height: "100vh" }}
         >
           <color attach="background" args={["#1e293b"]} />
-          <ScrollControls pages={5} damping={0.1}>
+          <ScrollControls pages={4} damping={0.1}>
             <ScrollManager section={section} onSectionChange={setSection} />
             <Scroll>
               <InitialPage section={section} />

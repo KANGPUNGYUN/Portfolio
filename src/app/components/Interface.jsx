@@ -1,20 +1,6 @@
 import { motion } from "framer-motion";
 
 import {
-  javascript,
-  typescript,
-  html,
-  css,
-  reactjs,
-  next,
-  tailwind,
-  nodejs,
-  git,
-  figma,
-  threejs,
-} from "../../../public/skills";
-
-import {
   harudiary,
   mstayhotel,
   pungnyeonmarket,
@@ -26,6 +12,7 @@ import { Tilt } from "react-tilt";
 import linkedIn from "../../../public/linkedIn.png";
 import profile from "../../../public/profile.jpg";
 import Image from "next/image";
+import TypingAnimation from "./TypingAnimation";
 
 function Section(props) {
   const { children } = props;
@@ -42,8 +29,8 @@ function Section(props) {
         opacity: 1,
         y: 0,
         transition: {
-          duration: 1,
-          delay: 0.6,
+          duration: 0.4,
+          delay: 0.2,
         },
       }}
     >
@@ -57,7 +44,6 @@ function Interface(props) {
   return (
     <div className="flex flex-col items-center w-screen text-white">
       <AboutSection setSection={setSection} />
-      <SkillsSection />
       <ProjectsSection />
       <BlogSection />
       <ContactSection />
@@ -67,12 +53,12 @@ function Interface(props) {
 
 function AboutSection(props) {
   const { setSection } = props;
+
   return (
     <Section>
-      <h1 className="text-6xl font-extrabold leading-snug">
-        Hi, I&#39;m
-        <br />
-        <span>Kang Pung yun</span>
+      <h1 className="text-5xl font-bold">
+        <TypingAnimation text="안녕하세요" delay={0} />
+        <TypingAnimation text="개발자 강풍윤입니다." delay={0.5} />
       </h1>
       <motion.p
         className="text-lg text-gray-400 mt-4"
@@ -85,13 +71,13 @@ function AboutSection(props) {
           y: 0,
         }}
         transition={{
-          duration: 1,
-          delay: 1.5,
+          duration: 0.5,
+          delay: 0.5,
         }}
       >
-        I&#39;m Web Developer.
         <br />
-        I&#39;m interested in 3D Modeling, GIS and AI tools.
+        성장 포인트를 찾고, 효율적인 업무 방식을
+        <br />늘 고민하는 개발자입니다.
       </motion.p>
       <br />
       <motion.div
@@ -104,8 +90,8 @@ function AboutSection(props) {
           y: 0,
         }}
         transition={{
-          duration: 1,
-          delay: 2,
+          duration: 0.5,
+          delay: 1,
         }}
       >
         <p>
@@ -134,90 +120,6 @@ function AboutSection(props) {
 
         <p>&#125;</p>
       </motion.div>
-    </Section>
-  );
-}
-
-function SkillsSection() {
-  const skills = [
-    {
-      name: "HTML 5",
-      icon: html.src,
-    },
-    {
-      name: "CSS 3",
-      icon: css.src,
-    },
-    {
-      name: "JavaScript",
-      icon: javascript.src,
-    },
-    {
-      name: "TypeScript",
-      icon: typescript.src,
-    },
-    {
-      name: "React JS",
-      icon: reactjs.src,
-    },
-    {
-      name: "Next JS",
-      icon: next.src,
-    },
-    {
-      name: "Tailwind CSS",
-      icon: tailwind.src,
-    },
-    {
-      name: "Node JS",
-      icon: nodejs.src,
-    },
-    {
-      name: "Three JS",
-      icon: threejs.src,
-    },
-    {
-      name: "git",
-      icon: git.src,
-    },
-    {
-      name: "figma",
-      icon: figma.src,
-    },
-  ];
-
-  return (
-    <Section>
-      <div>
-        <h2 className="text-5xl font-bold">Skills</h2>
-        <motion.div
-          className="mt-8 p-8 rounded-2xl bg-white/80 w-96 max-h-lvh flex flex-wrap justify-center"
-          initial={{
-            opacity: 0,
-            y: 25,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 1,
-            delay: 1.5,
-          }}
-        >
-          {skills.map((skill) => (
-            <div
-              className="w-1/3 h-1/3 min-w-16 min-h-16 p-4 flex flex-col justify-center items-center"
-              key={skill.name}
-            >
-              <div className="relative w-1/3 h-1/3 min-w-16 min-h-16">
-                <Image src={skill.icon} alt={skill.name} fill />
-              </div>
-              <p className="text-black text-center">{skill.name}</p>
-            </div>
-          ))}
-        </motion.div>
-      </div>
     </Section>
   );
 }
@@ -408,8 +310,8 @@ function BlogSection() {
               y: 0,
             }}
             transition={{
-              duration: 1,
-              delay: 1.5,
+              duration: 0.5,
+              delay: 0.5,
             }}
           >
             <div className="flex flex-col gap-3">
@@ -492,8 +394,8 @@ function ContactSection() {
               x: 0,
             }}
             transition={{
-              duration: 1,
-              delay: 1.5,
+              duration: 0.5,
+              delay: 0.5,
             }}
           >
             <Tilt
@@ -514,7 +416,7 @@ function ContactSection() {
                   />
                 </div>
               </div>
-              <div className="text-3xl mt-4">Kang Pung_yun</div>
+              <div className="text-3xl mt-4">Kang Pung-Yun</div>
               <div className="text-xl text-gray-300">Web Developer</div>
               <div
                 className="text-l text-gray-100 mt-2 hover:text-emerald-400 cursor-pointer"
@@ -573,8 +475,8 @@ function ContactSection() {
               x: 0,
             }}
             transition={{
-              duration: 1,
-              delay: 1.5,
+              duration: 0.5,
+              delay: 0.5,
             }}
           >
             <h3 className="text-3xl font-bold mb-6">History</h3>

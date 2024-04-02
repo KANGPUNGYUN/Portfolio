@@ -23,7 +23,7 @@ function InitialPage(props) {
         scale={[100, 100, 100]}
         animate={{
           x: section === 0 ? 0 : 2,
-          y: section === 0 ? 0 : 8,
+          y: section === 0 ? 0 : 50,
           z: section === 0 ? 0 : -5,
         }}
       >
