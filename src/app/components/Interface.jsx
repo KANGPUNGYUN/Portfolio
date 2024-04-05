@@ -292,7 +292,7 @@ function BlogSection() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/route");
+        const response = await fetch("/api");
         const responseData = await response.text();
         let xmlDocs = new DOMParser().parseFromString(responseData, "text/xml");
         let items = xmlDocs.getElementsByTagName("item");
