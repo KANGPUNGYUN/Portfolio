@@ -283,71 +283,27 @@ function ProjectsSection() {
 }
 
 function BlogSection() {
-  const [posts, setPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(3);
-  const [pageGroups, setPageGroups] = useState([]);
-  const [currentGroup, setCurrentGroup] = useState(1);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          "https://portfolio-phi-pied-52.vercel.app/api"
-        );
-        const responseData = await response.text();
-        let xmlDocs = new DOMParser().parseFromString(responseData, "text/xml");
-        let items = xmlDocs.getElementsByTagName("item");
-        const postsData = [];
-        for (let item of items) {
-          let post = {
-            title: item.querySelector("title").textContent,
-            url: item.querySelector("link").textContent,
-            createdAt: item.querySelector("pubDate").textContent,
-          };
-          postsData.push(post);
-        }
-        setPosts(postsData);
-      } catch (error) {
-        console.error("Error fetching external data:", error);
-      }
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const totalPageGroups = Math.ceil(posts.length / (postsPerPage * 5)); // 5개씩 페이지 그룹 생성
-    const groups = Array.from(
-      { length: totalPageGroups },
-      (_, index) => index + 1
-    );
-    setPageGroups(groups);
-  }, [posts.length, postsPerPage]);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const goToPrevGroup = () =>
-    setCurrentGroup((prevGroup) => (prevGroup > 1 ? prevGroup - 1 : prevGroup));
-  const goToNextGroup = () =>
-    setCurrentGroup((prevGroup) =>
-      prevGroup < pageGroups.length ? prevGroup + 1 : prevGroup
-    );
-
-  const getStartPage = () => (currentGroup - 1) * 5 + 1;
-  const getEndPage = () =>
-    Math.min(currentGroup * 5, Math.ceil(posts.length / postsPerPage));
-
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-
+  const posts = [
+    {
+      title: "[리팩토링] SOLID한 컴포넌트 만들기",
+      url: "https://velog.io/@kangpungyun/SOLID%ED%95%9C-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0",
+      tags: [{ name: "SOLID" }, { name: "Refactoring" }],
+    },
+    {
+      title:
+        "[리팩토링] Next.js 13로 Lighthouse 웹 성능 23점, 접근성 27점 개선하기",
+      url: "https://velog.io/@kangpungyun/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81-Lighthouse%EB%A1%9C-Next.js-%EC%9B%B9-%EC%84%B1%EB%8A%A5-23%EC%A0%90-%EC%A0%91%EA%B7%BC%EC%84%B1-27%EC%A0%90-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B8%B0",
+      tags: [{ name: "Next.js" }, { name: "Refactoring" }],
+    },
+  ];
   return (
     <Section>
       <div>
         <h2 className="text-5xl font-bold mb-12">Blog</h2>
-        {currentPosts.map((post, index) => (
+        {posts.map((post) => (
           <motion.div
-            key={index}
-            className="pt-10 pb-10 border-t-4 flex items-center justify-between gap-[20px] w-[90vw] lg:w-[900px] lg:gap-40"
+            key={post.title}
+            className="pt-10 pb-10 border-t-4 w-full flex items-center justify-between gap-[20px] sm:gap-40"
             initial={{
               opacity: 0,
               y: 25,
@@ -362,19 +318,20 @@ function BlogSection() {
             }}
           >
             <div className="flex flex-col gap-3">
-              <div
-                className="sm:text-3xl text-[18px] lg:w-[610px] truncate hover:text-emerald-400"
-                onClick={() => window.open(post.url, "_blank")}
-              >
-                {post.title}
+              <div className="sm:text-3xl text-[18px]">{post.title}</div>
+              <div className="flex gap-5">
+                {post.tags.map((tag) => (
+                  <div className="text-emerald-400" key={tag.name}>
+                    {tag.name}
+                  </div>
+                ))}
               </div>
-              <div className="text-emerald-400">{dateView(post.createdAt)}</div>
             </div>
             <div
               className="flex gap-1 text-l cursor-pointer hover:text-emerald-400"
               onClick={() => window.open(post.url, "_blank")}
             >
-              <div className="hidden lg:block">Read More</div>
+              Read More
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -392,21 +349,136 @@ function BlogSection() {
             </div>
           </motion.div>
         ))}
-        <Pagination
-          currentPage={currentPage}
-          totalPosts={posts.length}
-          pageGroups={pageGroups}
-          currentGroup={currentGroup}
-          paginate={paginate}
-          goToPrevGroup={goToPrevGroup}
-          goToNextGroup={goToNextGroup}
-          getStartPage={getStartPage}
-          getEndPage={getEndPage}
-        />
       </div>
     </Section>
   );
 }
+
+// function BlogSection() {
+//   const [posts, setPosts] = useState([]);
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [postsPerPage] = useState(3);
+//   const [pageGroups, setPageGroups] = useState([]);
+//   const [currentGroup, setCurrentGroup] = useState(1);
+
+//   useEffect(() => {
+//     async function fetchData() {
+//       try {
+//         const response = await fetch(
+//           "https://portfolio-phi-pied-52.vercel.app/api"
+//         );
+//         const responseData = await response.text();
+//         let xmlDocs = new DOMParser().parseFromString(responseData, "text/xml");
+//         let items = xmlDocs.getElementsByTagName("item");
+//         const postsData = [];
+//         for (let item of items) {
+//           let post = {
+//             title: item.querySelector("title").textContent,
+//             url: item.querySelector("link").textContent,
+//             createdAt: item.querySelector("pubDate").textContent,
+//           };
+//           postsData.push(post);
+//         }
+//         setPosts(postsData);
+//       } catch (error) {
+//         console.error("Error fetching external data:", error);
+//       }
+//     }
+//     fetchData();
+//   }, []);
+
+//   useEffect(() => {
+//     const totalPageGroups = Math.ceil(posts.length / (postsPerPage * 5)); // 5개씩 페이지 그룹 생성
+//     const groups = Array.from(
+//       { length: totalPageGroups },
+//       (_, index) => index + 1
+//     );
+//     setPageGroups(groups);
+//   }, [posts.length, postsPerPage]);
+
+//   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+//   const goToPrevGroup = () =>
+//     setCurrentGroup((prevGroup) => (prevGroup > 1 ? prevGroup - 1 : prevGroup));
+//   const goToNextGroup = () =>
+//     setCurrentGroup((prevGroup) =>
+//       prevGroup < pageGroups.length ? prevGroup + 1 : prevGroup
+//     );
+
+//   const getStartPage = () => (currentGroup - 1) * 5 + 1;
+//   const getEndPage = () =>
+//     Math.min(currentGroup * 5, Math.ceil(posts.length / postsPerPage));
+
+//   const indexOfLastPost = currentPage * postsPerPage;
+//   const indexOfFirstPost = indexOfLastPost - postsPerPage;
+//   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+//   return (
+//     <Section>
+//       <div>
+//         <h2 className="text-5xl font-bold mb-12">Blog</h2>
+//         {currentPosts.map((post, index) => (
+//           <motion.div
+//             key={index}
+//             className="pt-10 pb-10 border-t-4 flex items-center justify-between gap-[20px] w-[90vw] lg:w-[900px] lg:gap-40"
+//             initial={{
+//               opacity: 0,
+//               y: 25,
+//             }}
+//             whileInView={{
+//               opacity: 1,
+//               y: 0,
+//             }}
+//             transition={{
+//               duration: 0.5,
+//               delay: 0.5,
+//             }}
+//           >
+//             <div className="flex flex-col gap-3">
+//               <div
+//                 className="sm:text-3xl text-[18px] lg:w-[610px] truncate hover:text-emerald-400"
+//                 onClick={() => window.open(post.url, "_blank")}
+//               >
+//                 {post.title}
+//               </div>
+//               <div className="text-emerald-400">{dateView(post.createdAt)}</div>
+//             </div>
+//             <div
+//               className="flex gap-1 text-l cursor-pointer hover:text-emerald-400"
+//               onClick={() => window.open(post.url, "_blank")}
+//             >
+//               <div className="hidden lg:block">Read More</div>
+//               <svg
+//                 xmlns="http://www.w3.org/2000/svg"
+//                 fill="none"
+//                 viewBox="0 0 24 24"
+//                 strokeWidth={1.5}
+//                 stroke="currentColor"
+//                 className="w-[20px] h-[20px]"
+//               >
+//                 <path
+//                   strokeLinecap="round"
+//                   strokeLinejoin="round"
+//                   d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+//                 />
+//               </svg>
+//             </div>
+//           </motion.div>
+//         ))}
+//         <Pagination
+//           currentPage={currentPage}
+//           totalPosts={posts.length}
+//           pageGroups={pageGroups}
+//           currentGroup={currentGroup}
+//           paginate={paginate}
+//           goToPrevGroup={goToPrevGroup}
+//           goToNextGroup={goToNextGroup}
+//           getStartPage={getStartPage}
+//           getEndPage={getEndPage}
+//         />
+//       </div>
+//     </Section>
+//   );
+// }
 
 function ContactSection() {
   const history = [
