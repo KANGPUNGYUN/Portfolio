@@ -292,7 +292,9 @@ function BlogSection() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api");
+        const response = await fetch(
+          "https://portfolio-phi-pied-52.vercel.app/api"
+        );
         const responseData = await response.text();
         let xmlDocs = new DOMParser().parseFromString(responseData, "text/xml");
         let items = xmlDocs.getElementsByTagName("item");
