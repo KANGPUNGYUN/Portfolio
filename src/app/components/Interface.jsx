@@ -375,7 +375,7 @@ function BlogSection() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/rss"); // const response = await fetch("http://localhost:3001/");
+        const response = await fetch("/"); // const response = await fetch("http://localhost:3001/");
         const responseData = await response.json();
         setPosts(responseData);
       } catch (error) {
