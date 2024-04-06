@@ -16,7 +16,6 @@ import TypingAnimation from "./TypingAnimation";
 import { useState, useEffect } from "react";
 import dateView from "../utils/date";
 import Pagination from "./Pagination";
-import axios from "axios";
 
 function Section(props) {
   const { children } = props;
