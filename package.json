@@ -11,14 +11,20 @@
   "dependencies": {
     "@react-three/drei": "^9.102.6",
     "@react-three/fiber": "^8.16.0",
+    "cors": "^2.8.5",
     "dayjs": "^1.11.10",
+    "express": "^4.19.2",
+    "fast-xml-parser": "^4.3.6",
     "framer-motion": "^11.0.22",
     "framer-motion-3d": "^11.0.22",
     "gsap": "^3.12.5",
+    "http-server": "^14.1.1",
+    "jsdom": "^24.0.0",
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-tilt": "^1.0.2"
+    "react-tilt": "^1.0.2",
+    "xmldom": "^0.6.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
