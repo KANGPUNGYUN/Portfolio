@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"next dev\" \"node server.js\"",
-    "build": "next build",
+    "build": "concurrently \"next build\" \"node server.js\"",
     "start": "concurrently \"next start\" \"node server.js\"",
     "lint": "next lint"
   },
