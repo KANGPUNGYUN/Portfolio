@@ -1,0 +1,11 @@
+{
+  "routes": [
+    {
+      "src": "/api/rss",
+      "methods": ["GET"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    }
+  ]
+}
