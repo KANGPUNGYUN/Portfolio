@@ -1,19 +1,23 @@
-const nextConfig = {
+module.exports = {
   async headers() {
     return [
       {
-        source: "/", // 모든 API 엔드포인트에 대해 CORS 설정
+        // matching all API routes
+        source: "/api/:path*",
         headers: [
-          { key: "Access-Control-Allow-Origin", value: "*" }, // 모든 도메인에서 접근 허용
-          { key: "Access-Control-Allow-Methods", value: "GET" }, // GET 메서드 허용
+          { key: "Access-Control-Allow-Credentials", value: "true" },
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+          },
           {
             key: "Access-Control-Allow-Headers",
-            value: "X-Requested-With, Content-Type, Authorization",
-          }, // 헤더 허용
+            value:
+              "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+          },
         ],
       },
     ];
   },
 };
-
-module.exports = nextConfig;
