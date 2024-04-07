@@ -1,15 +1,16 @@
-import axios from "axios";
-import { DOMParser } from "xmldom";
+const axios = require("axios");
+const { DOMParser } = require("xmldom");
 
 export default async function handler(req, res) {
   try {
     const response = await axios.get("https://v2.velog.io/rss/@kangpungyun");
     const xmlData = response.data;
+    // Parse XML data
     const xmlDocs = new DOMParser().parseFromString(xmlData, "text/xml");
     const items = xmlDocs.getElementsByTagName("item");
 
-    console.log(xmlData);
     const postsData = [];
+    // Extract required information from XML
     for (let key in items) {
       if (items.hasOwnProperty(key)) {
         let item = items[key];
@@ -23,14 +24,8 @@ export default async function handler(req, res) {
       }
     }
     postsData.pop();
-    return new Response(postsData, {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-    });
+    console.log(postsData);
+    res.status(200).json(postsData);
   } catch (error) {
     console.error("Error fetching RSS:", error);
     res.status(500).json({ error: "Error fetching RSS" });

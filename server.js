@@ -11,7 +11,14 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   const server = express();
 
-  server.use(cors());
+  server.use(
+    cors({
+      origin: [
+        "http://localhost:3000",
+        "https://portfolio-phi-pied-52.vercel.app",
+      ],
+    })
+  );
 
   server.get("/api/rss", async (req, res) => {
     try {
