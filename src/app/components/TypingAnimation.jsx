@@ -14,7 +14,7 @@ function TypingAnimation({ text, delay }) {
       ease: "easeInOut",
     });
     return controls.stop;
-  }, [count, text.length]);
+  }, [count, text.length, delay]);
 
   return <motion.p>{displayText}</motion.p>;
 }

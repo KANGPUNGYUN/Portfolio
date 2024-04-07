@@ -23,7 +23,7 @@ function ScrollManager(props) {
         isAnimating.current = false;
       },
     });
-  }, [section]);
+  }, [section, data]);
 
   useFrame(() => {
     if (isAnimating.current) {
