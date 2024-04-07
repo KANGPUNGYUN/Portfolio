@@ -1,7 +1,7 @@
-const axios = require("axios");
-const { DOMParser } = require("xmldom");
+import axios from "axios";
+import { DOMParser } from "xmldom";
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   try {
     const response = await axios.get("https://v2.velog.io/rss/@kangpungyun");
     const xmlData = response.data;
@@ -27,4 +27,4 @@ module.exports = async (req, res) => {
     console.error("Error fetching RSS:", error);
     res.status(500).json({ error: "Error fetching RSS" });
   }
-};
+}

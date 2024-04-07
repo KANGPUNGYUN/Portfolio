@@ -375,7 +375,11 @@ function BlogSection() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/"); // const response = await fetch("http://localhost:3001/");
+        const response = await fetch(
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:3001/api/rss" // 로컬 환경에서 Express 서버
+            : "/api/rss" // Vercel 배포 시 API Route
+        );
         const responseData = await response.json();
         setPosts(responseData);
       } catch (error) {
