@@ -8,6 +8,7 @@ export default async function handler(req, res) {
     const xmlDocs = new DOMParser().parseFromString(xmlData, "text/xml");
     const items = xmlDocs.getElementsByTagName("item");
 
+    console.log(items);
     const postsData = [];
     for (let key in items) {
       if (items.hasOwnProperty(key)) {
