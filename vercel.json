@@ -1,11 +1,8 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/rss",
-      "methods": ["GET"],
-      "headers": {
-        "Access-Control-Allow-Origin": "*"
-      }
+      "source": "/api/:path*",
+      "destination": "https://portfolio-phi-pied-52.vercel.app/:path*"
     }
   ]
 }
