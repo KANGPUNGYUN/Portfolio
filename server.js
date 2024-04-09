@@ -11,14 +11,7 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   const server = express();
 
-  server.use(
-    cors({
-      origin: [
-        "http://localhost:3000",
-        "https://portfolio-phi-pied-52.vercel.app",
-      ],
-    })
-  );
+  server.use(cors());
 
   server.get("/api/rss", async (req, res) => {
     try {
@@ -52,7 +45,7 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 3001;
   server.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
   });

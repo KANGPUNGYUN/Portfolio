@@ -282,89 +282,6 @@ function ProjectsSection() {
   );
 }
 
-// function BlogSection() {
-//   async function fetchData() {
-//     try {
-//       const response = await fetch("http://localhost:3001/");
-//       const responseData = await response.json();
-//       console.log(responseData);
-//     } catch (error) {
-//       console.error("Error fetching RSS data:", error);
-//     }
-//   }
-
-//   fetchData();
-//   const posts = [
-//     {
-//       title: "[리팩토링] SOLID한 컴포넌트 만들기",
-//       url: "https://velog.io/@kangpungyun/SOLID%ED%95%9C-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0",
-//       tags: [{ name: "SOLID" }, { name: "Refactoring" }],
-//     },
-//     {
-//       title:
-//         "[리팩토링] Next.js 13로 Lighthouse 웹 성능 23점, 접근성 27점 개선하기",
-//       url: "https://velog.io/@kangpungyun/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81-Lighthouse%EB%A1%9C-Next.js-%EC%9B%B9-%EC%84%B1%EB%8A%A5-23%EC%A0%90-%EC%A0%91%EA%B7%BC%EC%84%B1-27%EC%A0%90-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B8%B0",
-//       tags: [{ name: "Next.js" }, { name: "Refactoring" }],
-//     },
-//   ];
-//   return (
-//     <Section>
-//       <div>
-//         <h2 className="text-5xl font-bold mb-12">Blog</h2>
-//         {posts.map((post) => (
-//           <motion.div
-//             key={post.title}
-//             className="pt-10 pb-10 border-t-4 w-full flex items-center justify-between gap-[20px] sm:gap-40"
-//             initial={{
-//               opacity: 0,
-//               y: 25,
-//             }}
-//             whileInView={{
-//               opacity: 1,
-//               y: 0,
-//             }}
-//             transition={{
-//               duration: 0.5,
-//               delay: 0.5,
-//             }}
-//           >
-//             <div className="flex flex-col gap-3">
-//               <div className="sm:text-3xl text-[18px]">{post.title}</div>
-//               <div className="flex gap-5">
-//                 {post.tags.map((tag) => (
-//                   <div className="text-emerald-400" key={tag.name}>
-//                     {tag.name}
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-//             <div
-//               className="flex gap-1 text-l cursor-pointer hover:text-emerald-400"
-//               onClick={() => window.open(post.url, "_blank")}
-//             >
-//               Read More
-//               <svg
-//                 xmlns="http://www.w3.org/2000/svg"
-//                 fill="none"
-//                 viewBox="0 0 24 24"
-//                 strokeWidth={1.5}
-//                 stroke="currentColor"
-//                 className="w-[20px] h-[20px]"
-//               >
-//                 <path
-//                   strokeLinecap="round"
-//                   strokeLinejoin="round"
-//                   d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-//                 />
-//               </svg>
-//             </div>
-//           </motion.div>
-//         ))}
-//       </div>
-//     </Section>
-//   );
-// }
-
 function BlogSection() {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -372,21 +289,111 @@ function BlogSection() {
   const [pageGroups, setPageGroups] = useState([]);
   const [currentGroup, setCurrentGroup] = useState(1);
 
+  // MOCK 데이터
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          process.env.NODE_ENV === "development"
-            ? "http://localhost:3001/api/rss" // 로컬 환경에서 Express 서버
-            : "/api/rss" // Vercel 배포 시 API Route
-        );
-        const responseData = await response.json();
-        setPosts(responseData);
-      } catch (error) {
-        console.error("Error fetching external data:", error);
-      }
-    }
-    fetchData();
+    setPosts([
+      {
+        createdAt: "Mon, 08 Apr 2024 14:06:03 GMT",
+        title: "[프로그래머스] 타겟넘버 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%ED%83%80%EA%B2%9F%EB%84%98%EB%B2%84-JS-%ED%92%80%EC%9D%B4",
+      },
+      {
+        createdAt: "Tue, 02 Apr 2024 05:40:21 GMT",
+        title: "[프로그래머스] 기능개발 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EA%B8%B0%EB%8A%A5%EA%B0%9C%EB%B0%9C-JS-%ED%92%80%EC%9D%B4",
+      },
+      {
+        createdAt: "Mon, 01 Apr 2024 02:32:56 GMT",
+        title: "[프로그래머스] 완주하지 못한 선수 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%99%84%EC%A3%BC%ED%95%98%EC%A7%80-%EB%AA%BB%ED%95%9C-%EC%84%A0%EC%88%98-JS-%ED%92%80%EC%9D%B4",
+      },
+      {
+        createdAt: "Sun, 31 Mar 2024 06:52:24 GMT",
+        title: "[프로그래머스] 체육복 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%B2%B4%EC%9C%A1%EB%B3%B5-JS-%ED%92%80%EC%9D%B4",
+      },
+      {
+        createdAt: "Sun, 31 Mar 2024 04:23:05 GMT",
+        title: "[프로그래머스] 최소직사각형 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%B5%9C%EC%86%8C%EC%A7%81%EC%82%AC%EA%B0%81%ED%98%95-JS-%ED%92%80%EC%9D%B4",
+      },
+      {
+        createdAt: "Sat, 30 Mar 2024 11:19:21 GMT",
+        title: "[프로그래머스] 더 맵게 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EB%8D%94-%EB%A7%B5%EA%B2%8C-JS-%ED%92%80%EC%9D%B4",
+      },
+      {
+        createdAt: "Sat, 30 Mar 2024 02:26:16 GMT",
+        title: "[프로그래머스] K번째수 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-K%EB%B2%88%EC%A7%B8%EC%88%98-JS-%ED%92%80%EC%9D%B4",
+      },
+      {
+        createdAt: "Fri, 15 Dec 2023 13:45:49 GMT",
+        title: "[리팩토링] SOLID한 컴포넌트 만들기",
+        url: "https://velog.io/@kangpungyun/SOLID%ED%95%9C-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0",
+      },
+      {
+        createdAt: "Sun, 12 Nov 2023 14:34:32 GMT",
+        title:
+          "[리팩토링] Next.js 13로 Lighthouse 웹 성능 23점, 접근성 27점 개선하기",
+        url: "https://velog.io/@kangpungyun/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81-Lighthouse%EB%A1%9C-Next.js-%EC%9B%B9-%EC%84%B1%EB%8A%A5-23%EC%A0%90-%EC%A0%91%EA%B7%BC%EC%84%B1-27%EC%A0%90-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B8%B0",
+      },
+      {
+        createdAt: "Tue, 07 Nov 2023 11:27:34 GMT",
+        title: "[리팩토링] Lighthouse로 Next 웹 성능과 접근성 개선하기",
+        url: "https://velog.io/@kangpungyun/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81-%EC%9B%B9-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0%EC%9D%84-%EC%9C%84%ED%95%9C-Lighthouse-%EC%A7%80%ED%91%9C-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0",
+      },
+      {
+        createdAt: "Tue, 27 Jun 2023 09:44:44 GMT",
+        title: "[Algorithm] 이진 탐색 js",
+        url: "https://velog.io/@kangpungyun/Algorithm-%EC%9D%B4%EC%A7%84-%ED%83%90%EC%83%89-js",
+      },
+      {
+        createdAt: "Sun, 23 Oct 2022 16:49:09 GMT",
+        title: "FullCalendar 달력 내부 이벤트 직접 정의하기",
+        url: "https://velog.io/@kangpungyun/FullCalendar-%EB%8B%AC%EB%A0%A5-%EB%82%B4%EB%B6%80-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%A7%81%EC%A0%91-%EC%A0%95%EC%9D%98%ED%95%98%EA%B8%B0",
+      },
+      {
+        createdAt: "Thu, 27 Apr 2023 13:00:31 GMT",
+        title: "[JS] 프로토타입",
+        url: "https://velog.io/@kangpungyun/JS-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85",
+      },
+      {
+        createdAt: "Fri, 31 Mar 2023 20:24:53 GMT",
+        title: "[JS] ES6 문법",
+        url: "https://velog.io/@kangpungyun/JS-ES6-%EB%AC%B8%EB%B2%95",
+      },
+      {
+        createdAt: "Fri, 31 Mar 2023 17:28:03 GMT",
+        title: "[JS] 클래스",
+        url: "https://velog.io/@kangpungyun/JS-%ED%81%B4%EB%9E%98%EC%8A%A4",
+      },
+      {
+        createdAt: "Thu, 30 Mar 2023 15:58:12 GMT",
+        title: "[JS] 클로저",
+        url: "https://velog.io/@kangpungyun/JS-%ED%81%B4%EB%A1%9C%EC%A0%80",
+      },
+      {
+        createdAt: "Sat, 11 Mar 2023 19:19:20 GMT",
+        title: "[JS] 호이스팅",
+        url: "https://velog.io/@kangpungyun/JS-%ED%98%B8%EC%9D%B4%EC%8A%A4%ED%8C%85",
+      },
+      {
+        createdAt: "Tue, 25 Oct 2022 08:31:10 GMT",
+        title: "[JS] This란?",
+        url: "https://velog.io/@kangpungyun/JS-%EA%B0%9C%EB%85%90-This-%EC%A0%95%EB%A6%AC",
+      },
+      {
+        createdAt: "Sun, 23 Oct 2022 18:07:03 GMT",
+        title: "FullCalendar 시작하기",
+        url: "https://velog.io/@kangpungyun/FullCalendar-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0",
+      },
+      {
+        createdAt: "Sun, 23 Oct 2022 14:51:50 GMT",
+        title: "Drag&Drop 달력 구현하기",
+        url: "https://velog.io/@kangpungyun/DragDrop-%EB%8B%AC%EB%A0%A5-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0",
+      },
+    ]);
   }, []);
 
   useEffect(() => {
@@ -476,6 +483,118 @@ function BlogSection() {
     </Section>
   );
 }
+
+// function BlogSection() {
+//   const [posts, setPosts] = useState([]);
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [postsPerPage] = useState(3);
+//   const [pageGroups, setPageGroups] = useState([]);
+//   const [currentGroup, setCurrentGroup] = useState(1);
+
+//   useEffect(() => {
+//     async function fetchData() {
+//       try {
+//         const response = await fetch(
+//           process.env.NODE_ENV === "development"
+//             ? "https://localhost:3001/api/rss" // 로컬 환경에서 Express 서버
+//             : "https://portfolio-phi-pied-52.vercel.app/api/rss" // Vercel 배포 시 API Route
+//         );
+//         const responseData = await response.json();
+//         setPosts(responseData);
+//       } catch (error) {
+//         console.error("Error fetching external data:", error);
+//       }
+//     }
+//     fetchData();
+//   }, []);
+
+//   useEffect(() => {
+//     const totalPageGroups = Math.ceil(posts.length / (postsPerPage * 5));
+//     const groups = Array.from(
+//       { length: totalPageGroups },
+//       (_, index) => index + 1
+//     );
+//     setPageGroups(groups);
+//   }, [posts.length, postsPerPage]);
+
+//   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+//   const goToPrevGroup = () =>
+//     setCurrentGroup((prevGroup) => (prevGroup > 1 ? prevGroup - 1 : prevGroup));
+//   const goToNextGroup = () =>
+//     setCurrentGroup((prevGroup) =>
+//       prevGroup < pageGroups.length ? prevGroup + 1 : prevGroup
+//     );
+
+//   const getStartPage = () => (currentGroup - 1) * 5 + 1;
+//   const getEndPage = () =>
+//     Math.min(currentGroup * 5, Math.ceil(posts.length / postsPerPage));
+
+//   const indexOfLastPost = currentPage * postsPerPage;
+//   const indexOfFirstPost = indexOfLastPost - postsPerPage;
+//   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+//   return (
+//     <Section>
+//       <div>
+//         <h2 className="text-5xl font-bold mb-12">Blog</h2>
+//         {currentPosts?.map((post, index) => (
+//           <motion.div
+//             key={index}
+//             className="pt-10 pb-10 border-t-4 flex items-center justify-between gap-[20px] w-[90vw] lg:w-[900px] lg:gap-40"
+//             initial={{
+//               opacity: 0,
+//               y: 25,
+//             }}
+//             whileInView={{
+//               opacity: 1,
+//               y: 0,
+//             }}
+//             transition={{
+//               duration: 0.5,
+//               delay: 0.5,
+//             }}
+//             onClick={() => window.open(post.url, "_blank")}
+//           >
+//             <div className="flex flex-col gap-3">
+//               <div className="sm:text-3xl text-[18px] w-[75vw] lg:w-[620px] truncate hover:text-emerald-400 cursor-pointer">
+//                 {post.title}
+//               </div>
+//               <div className="text-emerald-400">{dateView(post.createdAt)}</div>
+//             </div>
+//             <div className="flex gap-1 text-l cursor-pointer hover:text-emerald-400">
+//               <div className="hidden lg:block">Read More</div>
+//               <svg
+//                 xmlns="http://www.w3.org/2000/svg"
+//                 fill="none"
+//                 viewBox="0 0 24 24"
+//                 strokeWidth={1.5}
+//                 stroke="currentColor"
+//                 className="w-[20px] h-[20px]"
+//               >
+//                 <path
+//                   strokeLinecap="round"
+//                   strokeLinejoin="round"
+//                   d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+//                 />
+//               </svg>
+//             </div>
+//           </motion.div>
+//         ))}
+//         <Pagination
+//           currentPage={currentPage}
+//           totalPosts={posts.length}
+//           pageGroups={pageGroups}
+//           currentGroup={currentGroup}
+//           paginate={paginate}
+//           goToPrevGroup={goToPrevGroup}
+//           goToNextGroup={goToNextGroup}
+//           getStartPage={getStartPage}
+//           getEndPage={getEndPage}
+//         />
+//       </div>
+//     </Section>
+//   );
+// }
 
 function ContactSection() {
   const history = [

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import ScrollManager from "./components/ScrollManager";
 import Menu from "./components/Menu";
 import { MotionConfig } from "framer-motion";
+import axios from "axios";
 
 export default function Home() {
   const [section, setSection] = useState(0);
