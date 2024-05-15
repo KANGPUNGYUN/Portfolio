@@ -155,7 +155,7 @@ function ProjectsSection() {
       image: fornerds.src,
       contribute: "팀",
       url: "https://fornerds.vercel.app/",
-      desc: "포너즈는 codementor 회사의 DevProject라는 사이트를 클론코딩한 사이트입니다. Anim라는 figma to code AI를 적용하여 개발속도를 최소화한 경험이 있습니다.",
+      desc: "포너즈는 codementor 회사의 DevProject라는 사이트를 클론코딩한 사이트입니다. Anima라는 figma to code AI를 적용하여 개발속도를 최소화한 경험이 있습니다.",
       skills: [
         { name: "Anima" },
         {
