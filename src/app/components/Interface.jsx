@@ -5,6 +5,8 @@ import {
   mstayhotel,
   pungnyeonmarket,
   github,
+  fornerds,
+  hopescience,
 } from "../../../public/projects";
 
 import { Tilt } from "react-tilt";
@@ -129,6 +131,41 @@ function AboutSection(props) {
 
 function ProjectsSection() {
   const projects = [
+    {
+      name: "희망과학심리상담센터",
+      image: hopescience.src,
+      contribute: "외주",
+      url: "https://online-edu-eight.vercel.app/",
+      github: "https://github.com/KANGPUNGYUN/online-edu",
+      desc: "희망과학심리상담센터는 양형을 위한 영상교육사이트입니다. 토스 페이먼츠를 이용한 결제시스템과 새로운 강의를 생성, 수정할 수 있는 관리자페이지도 함께 구현했습니다.",
+      skills: [
+        {
+          name: "React",
+        },
+        {
+          name: "Zustand",
+        },
+        {
+          name: "jspdf",
+        },
+      ],
+    },
+    {
+      name: "ForNerds",
+      image: fornerds.src,
+      contribute: "팀",
+      url: "https://fornerds.vercel.app/",
+      desc: "포너즈는 codementor 회사의 DevProject라는 사이트를 클론코딩한 사이트입니다. Anim라는 figma to code AI를 적용하여 개발속도를 최소화한 경험이 있습니다.",
+      skills: [
+        { name: "Anima" },
+        {
+          name: "React",
+        },
+        {
+          name: "Vercel",
+        },
+      ],
+    },
     {
       name: "하루쓰기",
       image: harudiary.src,
@@ -292,6 +329,11 @@ function BlogSection() {
   // MOCK 데이터
   useEffect(() => {
     setPosts([
+      {
+        createdAt: "Tue, 07 May 2024 14:06:03 GMT",
+        title: "[알고리즘] 완전 이진 트리 순회 알고리즘",
+        url: "https://velog.io/@kangpungyun/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%99%84%EC%A0%84-%EC%9D%B4%EC%A7%84-%ED%8A%B8%EB%A6%AC-%EC%88%9C%ED%9A%8C-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98",
+      },
       {
         createdAt: "Mon, 08 Apr 2024 14:06:03 GMT",
         title: "[프로그래머스] 타겟넘버 JS 풀이",
