@@ -4,6 +4,7 @@ import mstayhotel from "./mstayhotel.png";
 import pungnyeonmarket from "./pungnyeonmarket.png";
 import fornerds from "./fornerds.png";
 import hopescience from "./hopescience.png";
+import portfolio from "./portfolio.png";
 
 export {
   harudiary,
@@ -12,4 +13,5 @@ export {
   pungnyeonmarket,
   fornerds,
   hopescience,
+  portfolio
 };

@@ -7,6 +7,7 @@ import {
   github,
   fornerds,
   hopescience,
+  portfolio,
 } from "../../../public/projects";
 
 import { Tilt } from "react-tilt";
@@ -15,9 +16,12 @@ import linkedIn from "../../../public/linkedIn.png";
 import profile from "../../../public/profile.jpg";
 import Image from "next/image";
 import TypingAnimation from "./TypingAnimation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import dateView from "../utils/date";
 import Pagination from "./Pagination";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function Section(props) {
   const { children } = props;
@@ -138,6 +142,177 @@ function ProjectsSection() {
       url: "https://online-edu-eight.vercel.app/",
       github: "https://github.com/KANGPUNGYUN/online-edu",
       desc: "희망과학심리상담센터는 양형을 위한 영상교육사이트입니다. 토스 페이먼츠를 이용한 결제시스템과 새로운 강의를 생성, 수정할 수 있는 관리자페이지도 함께 구현했습니다.",
+      md: `
+## Zustand에서 React Query + Zustand로 상태관리하기
+
+\`\`\`javascript
+// 기존 store/index.js
+import { getApi, putApi, deleteApi, postApi, patchApi } from "../service/api";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+const useInquiryStore = create((set) => ({
+  isLoading: false,
+  error: null,
+  inquiries: [],
+  QnA: null,
+
+  getInquiries: async () => {
+    set({ isLoading: true });
+    try {
+      const response = await getApi({ path: "/inquiries" });
+      if (response) {
+        set({
+          inquiries: response
+            .map((inquiry) => ({
+              id: inquiry.id,
+              title: inquiry.title,
+              category: inquiry.category,
+              created_at: inquiry.created_at,
+              updated_at: inquiry.updated_at,
+              content: inquiry.content,
+              user_name: inquiry.user_name,
+              view_count: inquiry.view_count,
+              comments: inquiry.comments,
+            }))
+            .sort((a, b) => b.id - a.id),
+          isLoading: false,
+        });
+        console.log("질문 리스트를 성공적으로 가져왔습니다.");
+      } else {
+        throw new Error(\`Failed to fetch inquiries: Status \${response.status}\`);
+      }
+    } catch (error) {
+      set({ error: error.message, isLoading: false });
+      alert("질문 리스트를 가져오는 중 오류가 발생했습니다: " + error.message);
+    }
+  },
+
+  getInquiry: async (inquiry_id) => {
+    set({ isLoading: true });
+    try {
+      const response = await getApi({ path: \`/inquiries/\${inquiry_id}\` });
+      if (response) {
+        set({
+          QnA: response,
+          isLoading: false,
+        });
+        console.log("질문을 성공적으로 가져왔습니다.");
+        const sortedComments = response.comments.sort((a, b) => a.id - b.id);
+        response.comments = sortedComments;
+      } else {
+        throw new Error(\`Failed to fetch inquiry: Status \${response.status}\`);
+      }
+    } catch (error) {
+      set({ error: error.message, isLoading: false });
+      alert("질문을 가져오는 중 오류가 발생했습니다: " + error.message);
+    }
+  },
+
+}));
+
+export const inquiry = useInquiryStore;
+\`\`\`
+
+기존에는 Zustand를 이용하여 상태관리 + API를 관리하는 방식을 이용하고 있었습니다.
+
+하지만, 다음과 같이 사용하게 되는 경우 컴포넌트 코드의 길이가 매우 길어지고 복잡하게 사용하는 경우가 발생했습니다.
+그리고 목록페이지와 상세페이지 이동시 목록페이지에서 GET API 결과 안에 상세페이지 GET API 결과도 포함되어 있고,
+다시 상세페이지에서 목록페이지로 이동하는 경우에는 다시 목록페이지의 GET API를 이용하는 경우가 발생합니다.
+
+같은 결과를 위해 여러번 반복해서 API를 호출하는 방식이 매우 비효율적이었고,
+React Query의 캐싱 기능으로 이를 해결하고자 했습니다. 그리고 Zustand에서 사용하고 있는 상태관리 + API 방식에서 React Query가 API만 따로 관리하여 책임을 분리해주었습니다.
+이러한 과정을 통해 지속적인 관리에 용이한 방식과 불필요한 API 호출을 줄여서 성능을 개선한 경험입니다. 
+
+### 1. React Query hooks 작성
+\`\`\`javascript
+// queries/index.js
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { getApi, postApi, putApi, deleteApi, patchApi } from '../service/api';
+
+export const useInquiries = () => {
+  return useQuery('inquiries', () => getApi({ path: '/inquiries' }), {
+    select: (data) => data
+      .map((inquiry) => ({
+        id: inquiry.id,
+        title: inquiry.title,
+        category: inquiry.category,
+        created_at: inquiry.created_at,
+        updated_at: inquiry.updated_at,
+        content: inquiry.content,
+        user_name: inquiry.user_name,
+        view_count: inquiry.view_count,
+        comments: inquiry.comments,
+      }))
+      .sort((a, b) => b.id - a.id),
+  });
+};
+
+export const useInquiry = (inquiry_id) => {
+  return useQuery(['inquiry', inquiry_id], () => getApi({ path: \`/inquiries/\${inquiry_id}\` }), {
+    select: (data) => {
+      data.comments = data.comments.sort((a, b) => a.id - b.id);
+      return data;
+    },
+  });
+};
+
+\`\`\`
+
+### 2. Zustand 수정하기
+
+\`\`\`javascript
+// store/index.js
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+const useInquiryStore = create(
+  persist(
+    (set) => ({
+      inquiries: [],
+      QnA: null,
+      setInquiries: (inquiries) => set({ inquiries }),
+      setQnA: (QnA) => set({ QnA }),
+    }),
+    {
+      name: 'inquiry-store',
+    }
+  )
+);
+
+export const inquiry = useInquiryStore;
+\`\`\`
+
+### 3. React Query와 Zustand를 조합하여 사용
+
+\`\`\`javascript
+// Hooks/Inquiries
+import { useInquiries, useInquiry } from '../queries/index.js';
+import { inquiry } from '../store/index.js';
+
+export const useManageInquiries = () => {
+  const { data: inquiriesData, isLoading: inquiriesLoading, error: inquiriesError } = useInquiries();
+  const { data: inquiryData, isLoading: inquiryLoading, error: inquiryError } = useInquiry();
+
+  const setInquiries = inquiry((state) => state.setInquiries);
+  const setQnA = inquiry((state) => state.setQnA);
+
+  // React Query 데이터를 Zustand 상태로 설정
+  if (inquiriesData) setInquiries(inquiriesData);
+  if (inquiryData) setQnA(inquiryData);
+
+  return {
+    inquiriesData,
+    inquiriesLoading,
+    inquiriesError,
+    inquiryData,
+    inquiryLoading,
+    inquiryError,
+  };
+};
+\`\`\`
+
+`,
       skills: [
         {
           name: "React",
@@ -146,7 +321,7 @@ function ProjectsSection() {
           name: "Zustand",
         },
         {
-          name: "jspdf",
+          name: "React Query",
         },
       ],
     },
@@ -156,13 +331,45 @@ function ProjectsSection() {
       contribute: "팀",
       url: "https://fornerds.vercel.app/",
       desc: "포너즈는 codementor 회사의 DevProject라는 사이트를 클론코딩한 사이트입니다. Anima라는 figma to code AI를 적용하여 개발속도를 최소화한 경험이 있습니다.",
+      md: `
+## GPT-4o 배치파일로 프론트엔드 폴더구조 및 초기 템플릿 구현하기
+
+개발기획을 위한 회의에서 정리한 내용을 토대로 빠르게 초기 템플릿을 구현한 경험입니다. 반복되는 작업의 경우 AI를 활용하여 시간을 아낄 수 있는 경우가 많기 때문에, 해당 방법을 직접 진행해보았습니다. GPT-4o도 실수를 할 수 있는 경우가 발생하기 때문에 더 좋은 질문을 주고 더블체크할 수 있는 꼼꼼함도 필요했습니다.
+
+### 1. 개발기획서의 정리된 내용을 바탕으로 GPT-4o에게 폴더구조를 만들어달라고 합니다.
+
+### 2. 구현한 폴더구조를 더블체크한 뒤, 폴더구조를 전달하여 리눅스 배치파일을 만들어 달라고 합니다.
+
+![폴더구조](/projects/GPT.png)
+
+### 3. 프로젝트 폴더안의 해당 배치파일을 명령어로 실행합니다.
+
+### 4. 각각의 파일의 내용 또한 GPT-4o를 활용하여 초기 템플릿을 구현합니다.
+`,
       skills: [
-        { name: "Anima" },
+        { name: "Anima AI" },
         {
           name: "React",
         },
         {
           name: "Vercel",
+        },
+      ],
+    },
+    {
+      name: "강풍윤 포트폴리오",
+      image: portfolio.src,
+      contribute: "개인",
+      url: "portfolio-phi-pied-52.vercel.app",
+      github: "https://github.com/KANGPUNGYUN/Portfolio",
+      desc: "포트폴리오는 채용담당자에게 저의 개발자 이력을 명확하게 전달할 수 있도록 보여주기 위한 웹사이트입니다. 저의 간단한 자기소개 및 프로젝트, 블로그, 활동내역 위주로 정리했습니다.",
+      skills: [
+        { name: "Three.js" },
+        {
+          name: "fiber",
+        },
+        {
+          name: "drei",
         },
       ],
     },
@@ -181,7 +388,7 @@ function ProjectsSection() {
           name: "React",
         },
         {
-          name: "Vercel",
+          name: "TypeScript",
         },
       ],
     },
@@ -224,17 +431,63 @@ function ProjectsSection() {
     },
   ];
 
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const scrollContainerRef = useRef(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
+  const onMouseDown = (e) => {
+    isDragging.current = true;
+    startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
+    scrollLeft.current = scrollContainerRef.current.scrollLeft;
+  };
+
+  const onMouseLeave = () => {
+    isDragging.current = false;
+  };
+
+  const onMouseUp = () => {
+    isDragging.current = false;
+  };
+
+  const onMouseMove = (e) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX.current) * 2; // Scroll-fast
+    scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
+  };
+
+  const openModal = (project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
+  };
+
   return (
     <Section>
       <div>
         <h2 className="text-5xl font-bold">Projects</h2>
-        <div className="flex mt-10 overflow-x-hidden w-[90vw]">
-          <div className="flex w-full overflow-scroll [&>div]:flex-shrink-0">
+        <div className="flex mt-10 overflow-x-hidden w-[79vw]">
+          <div className="flex w-full overflow-x-scroll [&>div]:flex-shrink-0"
+            ref={scrollContainerRef}
+            onMouseDown={onMouseDown}
+            onMouseLeave={onMouseLeave}
+            onMouseUp={onMouseUp}
+            onMouseMove={onMouseMove} 
+            style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}
+          >
             {projects.map((project) => (
               <Tilt
                 option={{
                   max: 45,
-                  scale: 1,
+                  scale: 0.7,
                   speed: 450,
                 }}
                 className="bg-tertiary p-5 rounded-2xl w-[350px]"
@@ -298,11 +551,16 @@ function ProjectsSection() {
                       {project.contribute}
                     </div>
                   </div>
-                  <p className="mt-2 text-[14px] text-gray-400">
-                    {project.desc}
+                  <p className="mt-2 text-[14px] text-gray-400 break-keep">
+                    &nbsp;&nbsp;{project.desc}
                   </p>
                 </div>
-
+                <button
+                  onClick={() => openModal(project)}
+                  className="mt-2 text-blue-500 hover:underline"
+                >
+                  자세히 보기
+                </button>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {project.skills.map((skill) => (
                     <p key={skill.name} className="text-[14px]">
@@ -314,6 +572,13 @@ function ProjectsSection() {
             ))}
           </div>
         </div>
+      {selectedProject && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          project={selectedProject}
+        />
+      )}
       </div>
     </Section>
   );
@@ -329,6 +594,11 @@ function BlogSection() {
   // MOCK 데이터
   useEffect(() => {
     setPosts([
+      {
+        createdAt: "Sat, 18 May 2024 23:01:53 GMT",
+        title: "[개발초기] 디자인 시스템 + AI 프롬프팅",
+        url: "https://velog.io/@kangpungyun/%EA%B0%9C%EB%B0%9C%EC%B4%88%EA%B8%B0-%EB%94%94%EC%9E%90%EC%9D%B8-%EC%8B%9C%EC%8A%A4%ED%85%9C-AI-%ED%94%84%EB%A1%AC%ED%94%84%ED%8C%85",
+      },
       {
         createdAt: "Tue, 07 May 2024 14:06:03 GMT",
         title: "[알고리즘] 완전 이진 트리 순회 알고리즘",
@@ -526,118 +796,6 @@ function BlogSection() {
   );
 }
 
-// function BlogSection() {
-//   const [posts, setPosts] = useState([]);
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [postsPerPage] = useState(3);
-//   const [pageGroups, setPageGroups] = useState([]);
-//   const [currentGroup, setCurrentGroup] = useState(1);
-
-//   useEffect(() => {
-//     async function fetchData() {
-//       try {
-//         const response = await fetch(
-//           process.env.NODE_ENV === "development"
-//             ? "https://localhost:3001/api/rss" // 로컬 환경에서 Express 서버
-//             : "https://portfolio-phi-pied-52.vercel.app/api/rss" // Vercel 배포 시 API Route
-//         );
-//         const responseData = await response.json();
-//         setPosts(responseData);
-//       } catch (error) {
-//         console.error("Error fetching external data:", error);
-//       }
-//     }
-//     fetchData();
-//   }, []);
-
-//   useEffect(() => {
-//     const totalPageGroups = Math.ceil(posts.length / (postsPerPage * 5));
-//     const groups = Array.from(
-//       { length: totalPageGroups },
-//       (_, index) => index + 1
-//     );
-//     setPageGroups(groups);
-//   }, [posts.length, postsPerPage]);
-
-//   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-//   const goToPrevGroup = () =>
-//     setCurrentGroup((prevGroup) => (prevGroup > 1 ? prevGroup - 1 : prevGroup));
-//   const goToNextGroup = () =>
-//     setCurrentGroup((prevGroup) =>
-//       prevGroup < pageGroups.length ? prevGroup + 1 : prevGroup
-//     );
-
-//   const getStartPage = () => (currentGroup - 1) * 5 + 1;
-//   const getEndPage = () =>
-//     Math.min(currentGroup * 5, Math.ceil(posts.length / postsPerPage));
-
-//   const indexOfLastPost = currentPage * postsPerPage;
-//   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-//   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-
-//   return (
-//     <Section>
-//       <div>
-//         <h2 className="text-5xl font-bold mb-12">Blog</h2>
-//         {currentPosts?.map((post, index) => (
-//           <motion.div
-//             key={index}
-//             className="pt-10 pb-10 border-t-4 flex items-center justify-between gap-[20px] w-[90vw] lg:w-[900px] lg:gap-40"
-//             initial={{
-//               opacity: 0,
-//               y: 25,
-//             }}
-//             whileInView={{
-//               opacity: 1,
-//               y: 0,
-//             }}
-//             transition={{
-//               duration: 0.5,
-//               delay: 0.5,
-//             }}
-//             onClick={() => window.open(post.url, "_blank")}
-//           >
-//             <div className="flex flex-col gap-3">
-//               <div className="sm:text-3xl text-[18px] w-[75vw] lg:w-[620px] truncate hover:text-emerald-400 cursor-pointer">
-//                 {post.title}
-//               </div>
-//               <div className="text-emerald-400">{dateView(post.createdAt)}</div>
-//             </div>
-//             <div className="flex gap-1 text-l cursor-pointer hover:text-emerald-400">
-//               <div className="hidden lg:block">Read More</div>
-//               <svg
-//                 xmlns="http://www.w3.org/2000/svg"
-//                 fill="none"
-//                 viewBox="0 0 24 24"
-//                 strokeWidth={1.5}
-//                 stroke="currentColor"
-//                 className="w-[20px] h-[20px]"
-//               >
-//                 <path
-//                   strokeLinecap="round"
-//                   strokeLinejoin="round"
-//                   d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-//                 />
-//               </svg>
-//             </div>
-//           </motion.div>
-//         ))}
-//         <Pagination
-//           currentPage={currentPage}
-//           totalPosts={posts.length}
-//           pageGroups={pageGroups}
-//           currentGroup={currentGroup}
-//           paginate={paginate}
-//           goToPrevGroup={goToPrevGroup}
-//           goToNextGroup={goToNextGroup}
-//           getStartPage={getStartPage}
-//           getEndPage={getEndPage}
-//         />
-//       </div>
-//     </Section>
-//   );
-// }
-
 function ContactSection() {
   const history = [
     {
@@ -789,4 +947,107 @@ function ContactSection() {
     </Section>
   );
 }
+
+const Modal = ({ isOpen, onClose, project }) => {
+  if (!isOpen) return null;
+
+  const handleClickOutside = (e) => {
+    if (e.target.id === 'modal-background') {
+      onClose();
+    }
+  };
+
+  const customStyle = {
+    ...materialDark,
+    'pre[class*="language-"]': {
+      ...materialDark['pre[class*="language-"]'],
+      overflowX: 'auto', // 가로 스크롤
+      borderRadius: '8px', // border-radius 추가
+      padding: '1em',
+    },
+  };
+
+  return (
+    <div
+      id="modal-background"
+      className="z-30 fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center mt-[-100vh]"
+      onClick={handleClickOutside}
+    >
+      <div className="z-40 bg-white p-[35px] rounded-lg w-[90vw] max-w-[1000px] text-stone-950 relative max-h-[74vh] overflow-y-scroll">
+        <button
+          className="absolute top-[25px] right-[25px] text-xl font-bold hover:text-red-500"
+          onClick={onClose}
+        >
+          &times;
+        </button>
+        <h2 className="text-2xl font-bold mb-4">{project.name}</h2>
+        <p className="mb-4">{project.desc}</p>
+        {project.md ? <ReactMarkdown
+          className="prose"
+          components={{
+            h1: ({ node, ...props }) => <h1 className="text-3xl font-bold my-4" {...props} />,
+            h2: ({ node, ...props }) => <h2 className="text-2xl font-bold my-4" {...props} />,
+            h3: ({ node, ...props }) => <h3 className="text-xl font-bold my-4" {...props} />,
+            p: ({ node, ...props }) => <p className="my-2" {...props} />,
+            ul: ({ node, ...props }) => <ul className="list-disc list-inside my-2" {...props} />,
+            ol: ({ node, ...props }) => <ol className="list-decimal list-inside my-2" {...props} />,
+            code({ node, inline, className, children, ...props }) {
+              const match = /language-(\w+)/.exec(className || "");
+              return !inline && match ? (
+                <SyntaxHighlighter
+                  style={customStyle}
+                  language={match[1]}
+                  PreTag="div"
+                  {...props}
+                >
+                  {String(children).replace(/\n$/, "")}
+                </SyntaxHighlighter>
+              ) : (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            },
+            img({ node, ...props }) {
+              return (
+                <div className="my-4">
+                  <Image
+                    src={props.src}
+                    alt={props.alt}
+                    width={800}
+                    height={600}
+                    layout="responsive"
+                    objectFit="contain"
+                  />
+                </div>
+              );
+            },
+          }}
+        >
+          {project.md}
+        </ReactMarkdown> : (<>
+          <h3 className="text-xl font-semibold">주요 기술 스택:</h3>
+          <ul className="list-disc list-inside mb-4">
+            {project.skills.map((skill) => (
+              <li key={skill.name}>{skill.name}</li>
+            ))}
+          </ul>
+          {project.github && (
+            <div className="mt-4">
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                GitHub Repository
+              </a>
+            </div>
+          )}
+        </>)}
+      </div>
+    </div>
+  );
+};
+
 export default Interface;
