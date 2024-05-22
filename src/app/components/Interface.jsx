@@ -141,7 +141,7 @@ function ProjectsSection() {
       contribute: "외주",
       url: "https://online-edu-eight.vercel.app/",
       github: "https://github.com/KANGPUNGYUN/online-edu",
-      desc: "희망과학심리상담센터는 양형을 위한 영상교육사이트입니다. 토스 페이먼츠를 이용한 결제시스템과 새로운 강의를 생성, 수정할 수 있는 관리자페이지도 함께 구현했습니다.",
+      desc: "희망과학심리상담센터는 양형을 위한 영상교육사이트입니다. 백엔드 개발자와 프론트엔드 개발자 총 2명이 참여하였고, 프론트엔드 관련 모든 구현은 제가 담당했습니다.",
       md: `
 ## Zustand에서 React Query + Zustand로 상태관리하기
 
@@ -330,7 +330,7 @@ export const useManageInquiries = () => {
       image: fornerds.src,
       contribute: "팀",
       url: "https://fornerds.vercel.app/",
-      desc: "포너즈는 codementor 회사의 DevProject라는 사이트를 클론코딩한 사이트입니다. Anima라는 figma to code AI를 적용하여 개발속도를 최소화한 경험이 있습니다.",
+      desc: "포너즈는 codementor 회사의 DevProject라는 사이트를 클론코딩한 사이트입니다. Anima라는 figma to code AI를 적용하여 개발속도를 최소화한 경험이 있습니다. 팀 내에서 프론트엔드 초기 템플릿을 구현하고, AI가 작성한 CSS를 더블체크하는 부분을 담당했습니다.",
       md: `
 ## GPT-4o 배치파일로 프론트엔드 폴더구조 및 초기 템플릿 구현하기
 
@@ -379,7 +379,7 @@ export const useManageInquiries = () => {
       contribute: "개인",
       url: "https://www.harudiary.site/",
       github: "https://github.com/KANGPUNGYUN/harudiary",
-      desc: "하루쓰기는 일기 웹 서비스입니다. 회원가입 및 SNS 계정 로그인, 일기 쓰기/수정/삭제/조회 및 좋아요와 신고하기 등 모든 기능을 구현했습니다.",
+      desc: "하루쓰기는 일기 웹 서비스입니다. 회원가입 및 SNS 계정 로그인, 일기 쓰기/수정/삭제/조회 및 좋아요와 신고하기 등 모든 작업을 직접 구현했습니다.",
       skills: [
         {
           name: "Next.js",
@@ -398,7 +398,7 @@ export const useManageInquiries = () => {
       contribute: "팀",
       url: "https://pungnyeon.netlify.app/",
       github: "https://github.com/One-Hundred-Trials/Good-Harvest-Market",
-      desc: "풍년마켓은 농산물 직거래 플랫폼입니다. 회원가입과 회원정보수정, 팔로잉/팔로우 기능을 담당했습니다.",
+      desc: "풍년마켓은 농산물 직거래 플랫폼입니다. 팀 내에서 회원가입과 회원정보수정, 팔로잉/팔로우 기능을 담당했습니다.",
       skills: [
         {
           name: "React",
@@ -416,7 +416,7 @@ export const useManageInquiries = () => {
       image: mstayhotel.src,
       contribute: "외주",
       url: "http://www.mstayhotelclark.com/",
-      desc: "M Stay Hotel은 숙박예약서비스입니다. 웹 화면 구현과 구글 맵스 API, FullCalendar 오픈소스를 활용한 숙박예약서비스 기능을 구현했습니다.",
+      desc: "M Stay Hotel은 숙박예약서비스입니다. 해당 프로젝트에서 웹 화면 구현과 구글 맵스 API, FullCalendar 오픈소스를 활용한 숙박예약서비스 기능을 구현했습니다.",
       skills: [
         {
           name: "PHP",
