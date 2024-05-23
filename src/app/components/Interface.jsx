@@ -141,7 +141,7 @@ function ProjectsSection() {
       contribute: "외주",
       url: "https://online-edu-eight.vercel.app/",
       github: "https://github.com/KANGPUNGYUN/online-edu",
-      desc: "희망과학심리상담센터는 양형을 위한 영상교육사이트입니다. 백엔드 개발자와 프론트엔드 개발자 총 2명이 참여하였고, 프론트엔드 관련 모든 구현은 제가 담당했습니다.",
+      desc: "희망과학심리상담센터는 양형을 위한 영상교육사이트입니다. 백엔드 개발자와 프론트엔드 개발자 총 2명이 참여하였고, 프론트엔드 관련 모든 구현을 담당했습니다.",
       md: `
 ## Zustand에서 React Query + Zustand로 상태관리하기
 
