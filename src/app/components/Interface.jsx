@@ -141,176 +141,147 @@ function ProjectsSection() {
       contribute: "외주",
       url: "https://online-edu-eight.vercel.app/",
       github: "https://github.com/KANGPUNGYUN/online-edu",
-      desc: "희망과학심리상담센터는 양형을 위한 영상교육사이트입니다. 백엔드 개발자와 프론트엔드 개발자 총 2명이 참여하였고, 프론트엔드 관련 모든 구현을 담당했습니다.",
+      desc: "양형을 위한 영상 교육사이트입니다. 관리자 페이지에서 드래그 앤 드롭을 활용한 서비스 생성, 수료증 PDF 출력 기능 등 모든 프론트엔드 구현을 담당했습니다.",
       md: `
-## Zustand에서 React Query + Zustand로 상태관리하기
+## 1. 드래그 앤 드롭 서비스 생성
+
+![드로그앤드롭](/projects/dragDrop01.png)
 
 \`\`\`javascript
-// 기존 store/index.js
-import { getApi, putApi, deleteApi, postApi, patchApi } from "../service/api";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
-const useInquiryStore = create((set) => ({
-  isLoading: false,
-  error: null,
-  inquiries: [],
-  QnA: null,
-
-  getInquiries: async () => {
-    set({ isLoading: true });
-    try {
-      const response = await getApi({ path: "/inquiries" });
-      if (response) {
-        set({
-          inquiries: response
-            .map((inquiry) => ({
-              id: inquiry.id,
-              title: inquiry.title,
-              category: inquiry.category,
-              created_at: inquiry.created_at,
-              updated_at: inquiry.updated_at,
-              content: inquiry.content,
-              user_name: inquiry.user_name,
-              view_count: inquiry.view_count,
-              comments: inquiry.comments,
-            }))
-            .sort((a, b) => b.id - a.id),
-          isLoading: false,
-        });
-        console.log("질문 리스트를 성공적으로 가져왔습니다.");
-      } else {
-        throw new Error(\`Failed to fetch inquiries: Status \${response.status}\`);
-      }
-    } catch (error) {
-      set({ error: error.message, isLoading: false });
-      alert("질문 리스트를 가져오는 중 오류가 발생했습니다: " + error.message);
-    }
-  },
-
-  getInquiry: async (inquiry_id) => {
-    set({ isLoading: true });
-    try {
-      const response = await getApi({ path: \`/inquiries/\${inquiry_id}\` });
-      if (response) {
-        set({
-          QnA: response,
-          isLoading: false,
-        });
-        console.log("질문을 성공적으로 가져왔습니다.");
-        const sortedComments = response.comments.sort((a, b) => a.id - b.id);
-        response.comments = sortedComments;
-      } else {
-        throw new Error(\`Failed to fetch inquiry: Status \${response.status}\`);
-      }
-    } catch (error) {
-      set({ error: error.message, isLoading: false });
-      alert("질문을 가져오는 중 오류가 발생했습니다: " + error.message);
-    }
-  },
-
-}));
-
-export const inquiry = useInquiryStore;
-\`\`\`
-
-기존에는 Zustand를 이용하여 상태관리 + API를 관리하는 방식을 이용하고 있었습니다.
-
-하지만, 다음과 같이 사용하게 되는 경우 컴포넌트 코드의 길이가 매우 길어지고 복잡하게 사용하는 경우가 발생했습니다.
-그리고 목록페이지와 상세페이지 이동시 목록페이지에서 GET API 결과 안에 상세페이지 GET API 결과도 포함되어 있고,
-다시 상세페이지에서 목록페이지로 이동하는 경우에는 다시 목록페이지의 GET API를 이용하는 경우가 발생합니다.
-
-같은 결과를 위해 여러번 반복해서 API를 호출하는 방식이 매우 비효율적이었고,
-React Query의 캐싱 기능으로 이를 해결하고자 했습니다. 그리고 Zustand에서 사용하고 있는 상태관리 + API 방식에서 React Query가 API만 따로 관리하여 책임을 분리해주었습니다.
-이러한 과정을 통해 지속적인 관리에 용이한 방식과 불필요한 API 호출을 줄여서 성능을 개선한 경험입니다. 
-
-### 1. React Query hooks 작성
-\`\`\`javascript
-// queries/index.js
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { getApi, postApi, putApi, deleteApi, patchApi } from '../service/api';
-
-export const useInquiries = () => {
-  return useQuery('inquiries', () => getApi({ path: '/inquiries' }), {
-    select: (data) => data
-      .map((inquiry) => ({
-        id: inquiry.id,
-        title: inquiry.title,
-        category: inquiry.category,
-        created_at: inquiry.created_at,
-        updated_at: inquiry.updated_at,
-        content: inquiry.content,
-        user_name: inquiry.user_name,
-        view_count: inquiry.view_count,
-        comments: inquiry.comments,
-      }))
-      .sort((a, b) => b.id - a.id),
-  });
-};
-
-export const useInquiry = (inquiry_id) => {
-  return useQuery(['inquiry', inquiry_id], () => getApi({ path: \`/inquiries/\${inquiry_id}\` }), {
-    select: (data) => {
-      data.comments = data.comments.sort((a, b) => a.id - b.id);
-      return data;
-    },
-  });
-};
-
-\`\`\`
-
-### 2. Zustand 수정하기
-
-\`\`\`javascript
-// store/index.js
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
-const useInquiryStore = create(
-  persist(
-    (set) => ({
-      inquiries: [],
-      QnA: null,
-      setInquiries: (inquiries) => set({ inquiries }),
-      setQnA: (QnA) => set({ QnA }),
-    }),
-    {
-      name: 'inquiry-store',
-    }
-  )
-);
-
-export const inquiry = useInquiryStore;
-\`\`\`
-
-### 3. React Query와 Zustand를 조합하여 사용
-
-\`\`\`javascript
-// Hooks/Inquiries
-import { useInquiries, useInquiry } from '../queries/index.js';
-import { inquiry } from '../store/index.js';
-
-export const useManageInquiries = () => {
-  const { data: inquiriesData, isLoading: inquiriesLoading, error: inquiriesError } = useInquiries();
-  const { data: inquiryData, isLoading: inquiryLoading, error: inquiryError } = useInquiry();
-
-  const setInquiries = inquiry((state) => state.setInquiries);
-  const setQnA = inquiry((state) => state.setQnA);
-
-  // React Query 데이터를 Zustand 상태로 설정
-  if (inquiriesData) setInquiries(inquiriesData);
-  if (inquiryData) setQnA(inquiryData);
-
-  return {
-    inquiriesData,
-    inquiriesLoading,
-    inquiriesError,
-    inquiryData,
-    inquiryLoading,
-    inquiryError,
+  const [draggedLectureId, setDraggedLectureId] = useState(null);
+  const handleDragStart = (index) => (event) => {
+    event.dataTransfer.setData("text/plain", index);
+    event.dataTransfer.effectAllowed = "move";
   };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (targetIndex) => (event) => {
+    event.preventDefault();
+    const fromIndex = parseInt(event.dataTransfer.getData("text/plain"), 10);
+    if (fromIndex !== targetIndex) {
+      move(fromIndex, targetIndex);
+    }
+  };
+
+  return (
+
+  //...
+  
+  <div className="service-form-course-section-header">
+    <div></div>
+    <div>강의명</div>
+    <div>강의영상업로드</div>
+    <div>삭제</div>
+  </div>
+  {lectureFields.map((lecture, lectureIndex) => (
+    <Lecture
+      key={lecture.id}
+      lecture={lecture}
+      sectionIndex={sectionIndex}
+      lectureIndex={lectureIndex}
+      watch={watch}
+      register={register}
+      getValues={getValues}
+      setValue={setValue}
+      removeLecture={() => removeLecture(lectureIndex)}
+      onDragStart={handleDragStart(lectureIndex)}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop(lectureIndex)}
+      isDragging={draggedLectureId === lectureIndex}
+      control={control}
+      setupVideoMetadata={setupVideoMetadata}
+      errors={errors}
+      setShowModal={setShowModal}
+      setErrorMessage={setErrorMessage}
+    />
+  ))}
+  <button
+    onClick={addLecture}
+    className="service-form-add-lecture-button"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="14px"
+      height="14px"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        d="M4 12H20M12 4V20"
+        stroke="#F3C63F"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+    강의 추가
+  </button>
+
+  //...
+)
+\`\`\`
+
+### Drag & Drop의 동작순서를 구분하여 함수 생성
+
+Drag & Drop에서 시작하는 부분부터 모든 과정을 분리하여 원하는 동작이 시행될 수 있도록 구현했습니다.
+
+다음 코드를 통해,
+1. 드래그 시작할 때, 드래그하는 요소의 인덱스를 데이터로 설정하고 드래그 효과를 "move"로 설정합니다.
+2. 드래그한 요소가 다른 드롭 가능한 요소 위로 이동할 때, 드롭이 가능하도록 설정합니다.
+3. 드래그한 요소를 드롭할 때, 드래그한 요소와 드롭한 요소의 인덱스를 비교하고, 다르면 move 함수를 호출하여 요소를 이동합니다.
+
+다음 함수를 호출하여 인덱스 정보와 영상 파일 정보를 그대로 유지한 채 드래그 앤 드롭으로 순서를 변경할 수 있었습니다.
+
+특히 세션별로 강의 id가 같은 경우가 발생하기 때문에 강의 id를 세션 id과 강의 id를 조합하여 세션의 강의 id를 분리해주었습니다.
+
+## 2. jsPDF를 이용하여 수료증 PDF로 생성하기
+
+\`\`\`javascript
+
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import { Button } from "../../components/Button";
+import "./PdfGenerator.css";
+
+const generateAndDownloadPDF = async (certificate_id) => {
+  const input = document.getElementById(\`certificate-\${certificate_id}\`);
+  const pdfDPI = 300;
+  const scale = pdfDPI / 96;
+  const canvas = await html2canvas(input, {
+    scale: scale,
+    useCORS: true,
+    scrollX: 0,
+    scrollY: -window.scrollY,
+    windowWidth: input.scrollWidth,
+    windowHeight: input.scrollHeight,
+  });
+
+  const pdfWidth = (210 * pdfDPI) / 25.4;
+  const pdfHeight = (297 * pdfDPI) / 25.4;
+
+  const pdf = new jsPDF({
+    orientation: "p",
+    unit: "pt",
+    format: [pdfWidth, pdfHeight],
+  });
+
+  const imgData = canvas.toDataURL("image/png");
+  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+  pdf.save("이수증서.pdf");
 };
 \`\`\`
+
+### canvas를 이미지로 변환한 뒤 PDF로 생성하기
+
+pdf를 동적으로 생성하는 방식으로는 다양한 방법이 있으나 대표적으로 jsPDF와 html2canvas를 이용하여 생성할 수 있습니다.
+
+1. html2canvas를 이용하여 html 코드로 canvas에 들어갈 파일을 생성했습니다.
+2. canvas를 이미지 파일형식으로(PNG파일) 변환시켜줍니다.
+3. 이미지 파일로 변경한 것을 그대로 PDF파일 안에 넣어서 생성합니다.
 
 `,
       skills: [
@@ -326,43 +297,12 @@ export const useManageInquiries = () => {
       ],
     },
     {
-      name: "ForNerds",
-      image: fornerds.src,
-      contribute: "팀",
-      url: "https://fornerds.vercel.app/",
-      desc: "포너즈는 codementor 회사의 DevProject라는 사이트를 클론코딩한 사이트입니다. Anima라는 figma to code AI를 적용하여 개발속도를 최소화한 경험이 있습니다. 팀 내에서 프론트엔드 초기 템플릿을 구현하고, AI가 작성한 CSS를 더블체크하는 부분을 담당했습니다.",
-      md: `
-## GPT-4o 배치파일로 프론트엔드 폴더구조 및 초기 템플릿 구현하기
-
-개발기획을 위한 회의에서 정리한 내용을 토대로 빠르게 초기 템플릿을 구현한 경험입니다. 반복되는 작업의 경우 AI를 활용하여 시간을 아낄 수 있는 경우가 많기 때문에, 해당 방법을 직접 진행해보았습니다. GPT-4o도 실수를 할 수 있는 경우가 발생하기 때문에 더 좋은 질문을 주고 더블체크할 수 있는 꼼꼼함도 필요했습니다.
-
-### 1. 개발기획서의 정리된 내용을 바탕으로 GPT-4o에게 폴더구조를 만들어달라고 합니다.
-
-### 2. 구현한 폴더구조를 더블체크한 뒤, 폴더구조를 전달하여 리눅스 배치파일을 만들어 달라고 합니다.
-
-![폴더구조](/projects/GPT.png)
-
-### 3. 프로젝트 폴더안의 해당 배치파일을 명령어로 실행합니다.
-
-### 4. 각각의 파일의 내용 또한 GPT-4o를 활용하여 초기 템플릿을 구현합니다.
-`,
-      skills: [
-        { name: "Anima AI" },
-        {
-          name: "React",
-        },
-        {
-          name: "Vercel",
-        },
-      ],
-    },
-    {
       name: "강풍윤 포트폴리오",
       image: portfolio.src,
       contribute: "개인",
       url: "portfolio-phi-pied-52.vercel.app",
       github: "https://github.com/KANGPUNGYUN/Portfolio",
-      desc: "포트폴리오는 채용담당자에게 저의 개발자 이력을 명확하게 전달할 수 있도록 보여주기 위한 웹사이트입니다. 저의 간단한 자기소개 및 프로젝트, 블로그, 활동내역 위주로 정리했습니다.",
+      desc: "저의 포트폴리오를 명확하게 전달하는 웹사이트입니다. 저의 간단한 자기소개 및 프로젝트, 블로그, 활동내역 위주로 정리했습니다.",
       skills: [
         { name: "Three.js" },
         {
@@ -416,7 +356,7 @@ export const useManageInquiries = () => {
       image: mstayhotel.src,
       contribute: "외주",
       url: "http://www.mstayhotelclark.com/",
-      desc: "M Stay Hotel은 숙박예약서비스입니다. 해당 프로젝트에서 웹 화면 구현과 구글 맵스 API, FullCalendar 오픈소스를 활용한 숙박예약서비스 기능을 구현했습니다.",
+      desc: "M Stay Hotel은 숙박예약서비스입니다. 전체 웹 화면 구현과 구글 맵스 API, FullCalendar 오픈소스를 활용한 숙박예약서비스 기능을 구현했습니다.",
       skills: [
         {
           name: "PHP",
@@ -474,7 +414,7 @@ export const useManageInquiries = () => {
     <Section>
       <div>
         <h2 className="text-5xl font-bold">Projects</h2>
-        <div className="flex mt-10 overflow-x-hidden w-[79vw]">
+        <div className="flex mt-10 overflow-x-hidden w-[99vw]">
           <div className="flex w-full overflow-x-scroll [&>div]:flex-shrink-0"
             ref={scrollContainerRef}
             onMouseDown={onMouseDown}
@@ -594,6 +534,21 @@ function BlogSection() {
   // MOCK 데이터
   useEffect(() => {
     setPosts([
+      {
+        createdAt: "Mon, 3 Jun 2024 19:49:11 GMT",
+        title: "[프로그래머스] 베스트앨범 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EB%B2%A0%EC%8A%A4%ED%8A%B8%EC%95%A8%EB%B2%94-JS-%ED%92%80%EC%9D%B4",
+      },
+      {
+        createdAt: "Tue, 28 May 2024 19:49:11 GMT",
+        title: "[프로그래머스] 정수삼각형 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%A0%95%EC%88%98%EC%82%BC%EA%B0%81%ED%98%95-JS-%ED%92%80%EC%9D%B4",
+      },
+      {
+        createdAt: "Wed, 22 May 2024 22:32:21 GMT",
+        title: "[프로그래머스] 전력망을 둘로 나누기 JS 풀이",
+        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%A0%84%EB%A0%A5%EB%A7%9D%EC%9D%84-%EB%91%98%EB%A1%9C-%EB%82%98%EB%88%84%EA%B8%B0-JS-%ED%92%80%EC%9D%B4",
+      },
       {
         createdAt: "Sat, 18 May 2024 23:01:53 GMT",
         title: "[개발초기] 디자인 시스템 + AI 프롬프팅",
@@ -823,11 +778,47 @@ function ContactSection() {
       descEn: "introduce React Hook",
     },
   ];
+
+  const scrollContainerRef = useRef(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
+  const onMouseDown = (e) => {
+    isDragging.current = true;
+    startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
+    scrollLeft.current = scrollContainerRef.current.scrollLeft;
+  };
+
+  const onMouseLeave = () => {
+    isDragging.current = false;
+  };
+
+  const onMouseUp = () => {
+    isDragging.current = false;
+  };
+
+  const onMouseMove = (e) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX.current) * 2; // Scroll-fast
+    scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
+  };
+
   return (
     <Section>
       <h2 className="text-5xl font-bold">Contact</h2>
       <div className="overflow-x-hidden flex w-[90vw]">
-        <div className="flex gap-[30px] flex-initial overflow-x-scroll w-full">
+        <div 
+          className="flex gap-[30px] flex-initial overflow-x-scroll w-full "
+          ref={scrollContainerRef}
+          onMouseDown={onMouseDown}
+          onMouseLeave={onMouseLeave}
+          onMouseUp={onMouseUp}
+          onMouseMove={onMouseMove}
+          style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}
+        >
           <motion.div
             className="mt-8 p-8 rounded-md w-96 max-w-full"
             initial={{
@@ -849,10 +840,10 @@ function ContactSection() {
               glareColor="#ffffff"
               glarePosition="bottom"
               glareBorderRadius="20px"
-              className="bg-white/40 p-5 rounded-2xl w-[350px] h-[490px] flex flex-col items-center border-white border-2 justify-center"
+              className="bg-white/40 p-5 rounded-2xl w-[50vw] h-[70vw] max-w-[350px] max-h-[490px] flex flex-col items-center border-white border-2 justify-center"
             >
-              <div className="bg-gray-800 w-[200px] h-[200px] rounded-full flex justify-center items-center">
-                <div className="relative w-[200px] h-[200px]">
+              <div className="bg-gray-800 w-[30vw] h-[30vw] max-w-[200px] max-h-[200px] rounded-full flex justify-center items-center">
+                <div className="relative w-[30vw] h-[30vw] max-w-[200px] max-h-[200px]">
                   <Image
                     src={profile.src}
                     alt="프로필_사진"
@@ -861,7 +852,7 @@ function ContactSection() {
                   />
                 </div>
               </div>
-              <div className="text-3xl mt-4">Kang Pung-Yun</div>
+              <div className="text-2xl mt-4">Kang Pung-Yun</div>
               <div className="text-xl text-gray-300">Web Developer</div>
               <div
                 className="text-l text-gray-100 mt-2 hover:text-emerald-400 cursor-pointer"
@@ -910,7 +901,7 @@ function ContactSection() {
             </Tilt>
           </motion.div>
           <motion.div
-            className="mt-16 p-8 rounded-2xl bg-white/80 w-[800px] h-[490px] text-black whitespace-nowrap"
+            className="mt-16 p-8 rounded-2xl bg-white/80 w-[800px] h-[70vw] max-h-[490px] text-black whitespace-nowrap"
             initial={{
               opacity: 0,
               x: 25,
@@ -924,18 +915,18 @@ function ContactSection() {
               delay: 0.5,
             }}
           >
-            <h3 className="text-3xl font-bold mb-6">History</h3>
+            <h3 className="text-2xl font-bold mb-5">History</h3>
             {history.map((history) => (
-              <div key={history.title} className="mt-4 ml-3">
+              <div key={history.title} className="mt-3 ml-2">
                 <div className="flex">
-                  <h3 className="text-2xl font-bold">{history.title}</h3>
-                  <h4 className="text-xl ml-3 text-gray-600">
+                  <h3 className="text-xl font-bold">{history.title}</h3>
+                  <h4 className="text-lg ml-3 text-gray-600">
                     {history.titleEn}
                   </h4>
                 </div>
                 <div className="flex">
-                  <p className="text-xl text-gray-500">{history.desc}</p>
-                  <span className="text-xl ml-3 text-gray-400">
+                  <p className="text-lg text-gray-500">{history.desc}</p>
+                  <span className="text-lg ml-3 text-gray-400">
                     {history.descEn}
                   </span>
                 </div>
