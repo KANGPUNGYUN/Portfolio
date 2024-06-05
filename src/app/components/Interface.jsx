@@ -5,7 +5,6 @@ import {
   mstayhotel,
   pungnyeonmarket,
   github,
-  fornerds,
   hopescience,
   portfolio,
 } from "../../../public/projects";
@@ -331,6 +330,16 @@ pdf를 동적으로 생성하는 방식으로는 다양한 방법이 있으나 �
           name: "TypeScript",
         },
       ],
+      md: `
+## 1. 구글의 Lighthouse 측정으로 리팩토링하기
+
+![하루쓰기 리펙토링](/projects/lighthouse.png)
+
+아래 블로그 포스트에서 하루쓰기 리팩토링 단계에서 웹 성능 23점, 접근성 27점 개선한 경험을 자세하게 작성했습니다.
+
+[> 해당 블로그 포스트로 이동하기](https://velog.io/@kangpungyun/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81-Lighthouse%EB%A1%9C-Next.js-%EC%9B%B9-%EC%84%B1%EB%8A%A5-23%EC%A0%90-%EC%A0%91%EA%B7%BC%EC%84%B1-27%EC%A0%90-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B8%B0)
+
+`
     },
     {
       name: "풍년마켓",
@@ -350,6 +359,15 @@ pdf를 동적으로 생성하는 방식으로는 다양한 방법이 있으나 �
           name: "Styled Components",
         },
       ],
+      md: `
+## 1. 유저 스토리를 활용한 개발 방식
+
+![유저스토리](/projects/userstory.png)
+
+위의 이미지처럼 모든 페이지에 대한 정보를 유저스토리에 정리하는 방식으로 개발을 진행했습니다.
+웹과 관련하여 모두 정리되어 있기 때문에 어떤 개발을 해야할지 서로 명확하게 이해하고 변경에 대한 내용은 함께 참여하여
+팀원 모두가 같은 개발을 목표로 진행할 수 있었습니다.
+`
     },
     {
       name: "M Stay Hotel",
@@ -979,6 +997,7 @@ const Modal = ({ isOpen, onClose, project }) => {
             h1: ({ node, ...props }) => <h1 className="text-3xl font-bold my-4" {...props} />,
             h2: ({ node, ...props }) => <h2 className="text-2xl font-bold my-4" {...props} />,
             h3: ({ node, ...props }) => <h3 className="text-xl font-bold my-4" {...props} />,
+            a: ({ node, ...props }) => <p className="my-2 text-sky-600 hover:underline cursor-pointer" {...props} />,
             p: ({ node, ...props }) => <p className="my-2" {...props} />,
             ul: ({ node, ...props }) => <ul className="list-disc list-inside my-2" {...props} />,
             ol: ({ node, ...props }) => <ol className="list-decimal list-inside my-2" {...props} />,
