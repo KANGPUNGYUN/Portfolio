@@ -138,8 +138,8 @@ function ProjectsSection() {
       name: "희망과학심리상담센터",
       image: hopescience.src,
       contribute: "외주",
-      url: "https://online-edu-eight.vercel.app/",
-      github: "https://github.com/KANGPUNGYUN/online-edu",
+      url: "https://www.xn--vb0b67vepvv2b.com/",
+      github: "https://github.com/KANGPUNGYUN/hopescience",
       desc: "양형을 위한 영상 교육사이트입니다. 관리자 페이지에서 드래그 앤 드롭을 활용한 서비스 생성, 수료증 PDF 출력 기능 등 모든 프론트엔드 구현을 담당했습니다.",
       md: `
 ## 1. 드래그 앤 드롭 서비스 생성
