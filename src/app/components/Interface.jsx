@@ -12,7 +12,7 @@ import {
 import { Tilt } from "react-tilt";
 
 import linkedIn from "../../../public/linkedIn.png";
-import profile from "../../../public/profile.jpg";
+import profile from "../../../public/usericon.png"; //profile.jpg
 import Image from "next/image";
 import TypingAnimation from "./TypingAnimation";
 import { useState, useEffect, useRef } from "react";
@@ -552,6 +552,11 @@ function BlogSection() {
   // MOCK 데이터
   useEffect(() => {
     setPosts([
+      {
+        createdAt: "Thu, 22 Jul 2024 00:20:34 GMT",
+        title: "외주 프로젝트를 마치면서",
+        url: "https://velog.io/@kangpungyun/%EC%99%B8%EC%A3%BC-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-%EB%A7%88%EC%B9%98%EB%A9%B4%EC%84%9C",
+      },
       {
         createdAt: "Mon, 3 Jun 2024 19:49:11 GMT",
         title: "[프로그래머스] 베스트앨범 JS 풀이",
