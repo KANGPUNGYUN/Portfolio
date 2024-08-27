@@ -258,7 +258,7 @@ function ProjectsSection() {
         },
       ],
       md: `
-## 1. 유저 스토리를 활용한 개발 방식
+## 1. 스토리보드를 활용한 개발 방식
 
 ![스토리보드](/projects/userstory.png)
 

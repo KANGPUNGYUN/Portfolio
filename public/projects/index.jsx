@@ -1,10 +1,10 @@
 import harudiary from "./harudiary.webp";
 import github from "./github.webp";
-import mstayhotel from "./mstayhotel.png";
-import pungnyeonmarket from "./pungnyeonmarket.png";
-import fornerds from "./fornerds.png";
-import hopescience from "./hopescience.png"
-import portfolio from "./portfolio.png";
+import mstayhotel from "./mstayhotel.webp";
+import pungnyeonmarket from "./pungnyeonmarket.webp";
+import fornerds from "./fornerds.webp";
+import hopescience from "./hopescience.webp"
+import portfolio from "./portfolio.webp";
 
 export {
   harudiary,
