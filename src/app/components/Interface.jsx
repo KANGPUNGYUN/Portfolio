@@ -142,145 +142,43 @@ function ProjectsSection() {
       github: "https://github.com/KANGPUNGYUN/hopescience",
       desc: "양형을 위한 영상 교육사이트입니다. 관리자 페이지에서 드래그 앤 드롭을 활용한 서비스 생성, 수료증 PDF 출력 기능 등 모든 프론트엔드 구현을 담당했습니다.",
       md: `
-## 1. 드래그 앤 드롭 서비스 생성
+2. 구현
 
-![드로그앤드롭](/projects/dragDrop01.png)
+리엑트 코드를 기준으로 \`\`\`anima\`\`\`가 만들어 준 기술스택을 사용했습니다. 그래서 \`\`\`anima\`\`\`에서 제공한 \`\`\`percel\`\`\`이라는 번들러를 사용하고 있었지만, 나중에는 \`\`\`CRA(create-react-app)\`\`\`으로 변경하고 \`\`\`vercel\`\`\`이란 프레임워크를 통해 빌드 과정에 도움을 받았습니다. 그리고 \`\`\`react-hook-form\`\`\`과 \`\`\`yup\`\`\`을 이용하여 입력값에 대한 유효성 검증하고 에러를 생성했습니다. 또한 상태관리를 해야되는 부분이 많았기 때문에 \`\`\`zustand\`\`\`를 이용하여 \`\`\`props\`\`\`를 건너건너 전달하는 방식이 아닌 전달되어야 되는 부분에서 직접 관리할 수 있도록 코드를 구현했습니다.
 
-\`\`\`javascript
-  const [draggedLectureId, setDraggedLectureId] = useState(null);
-  const handleDragStart = (index) => (event) => {
-    event.dataTransfer.setData("text/plain", index);
-    event.dataTransfer.effectAllowed = "move";
-  };
+### 2-1) 복잡한 데이터 생성 및 수정
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-  };
+![](/projects/hope_image_02.webp)
 
-  const handleDrop = (targetIndex) => (event) => {
-    event.preventDefault();
-    const fromIndex = parseInt(event.dataTransfer.getData("text/plain"), 10);
-    if (fromIndex !== targetIndex) {
-      move(fromIndex, targetIndex);
-    }
-  };
+하나의 서비스를 구현하기 위해 일반정보, 썸네일정보, 가격정보, 강의목록 정보가 필요했습니다. 강의목록은 서비스-세션-강의 계층 구조로 구성되며, 각 컴포넌트 사이에서 주고받는 데이터가 많아 \`\`\`zustand\`\`\`를 사용해 \`\`\`props drilling\`\`\` 문제를 예방했습니다.
 
-  return (
+클라이언트가 작성해야 할 부분이 많아 \`\`\`Accodion 컴포넌트\`\`\` 형태로 접고 펼칠 수 있도록 표현했습니다. 또한 입력값 유효성 검증을 위해 \`\`\`react-hook-form\`\`\`과 \`\`\`yup\`\`\`을 활용해 데이터 양식과 최소 조건을 만족하는 서비스를 생성할 수 있도록 구조화했습니다.
 
-  //...
-  
-  <div className="service-form-course-section-header">
-    <div></div>
-    <div>강의명</div>
-    <div>강의영상업로드</div>
-    <div>삭제</div>
-  </div>
-  {lectureFields.map((lecture, lectureIndex) => (
-    <Lecture
-      key={lecture.id}
-      lecture={lecture}
-      sectionIndex={sectionIndex}
-      lectureIndex={lectureIndex}
-      watch={watch}
-      register={register}
-      getValues={getValues}
-      setValue={setValue}
-      removeLecture={() => removeLecture(lectureIndex)}
-      onDragStart={handleDragStart(lectureIndex)}
-      onDragOver={handleDragOver}
-      onDrop={handleDrop(lectureIndex)}
-      isDragging={draggedLectureId === lectureIndex}
-      control={control}
-      setupVideoMetadata={setupVideoMetadata}
-      errors={errors}
-      setShowModal={setShowModal}
-      setErrorMessage={setErrorMessage}
-    />
-  ))}
-  <button
-    onClick={addLecture}
-    className="service-form-add-lecture-button"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="14px"
-      height="14px"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        d="M4 12H20M12 4V20"
-        stroke="#F3C63F"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-    강의 추가
-  </button>
+그리고 한 세션에 강의가 많아질 경우 드래그 앤 드롭으로 강의 순서를 변경할 수 있도록 구성해 복잡한 데이터를 생성하고 수정할 수 있게 했습니다.
 
-  //...
-)
-\`\`\`
+### 2-2) 수료증 PDF 출력
 
-### Drag & Drop의 동작순서를 구분하여 함수 생성
+![](/projects/hope_image_03.webp)
 
-Drag & Drop에서 시작하는 부분부터 모든 과정을 분리하여 원하는 동작이 시행될 수 있도록 구현했습니다.
+수료증을 PDF 파일로 출력할 수 있는 기능은 핵심 기능 중 하나였습니다. 수료증 출력 기능에 대해 어떻게 하면 구현할 수 있을지 조사해본 결과, jspdf와 html2canvas라는 오픈소스를 알게 되었습니다. \`\`\`jspdf\`\`\`는 자바스크립트 환경에서 pdf파일을 생성해주는 오픈소스이며, \`\`\`html2canvas\`\`\`는 \`\`\`html\`\`\`로 그린 화면을 이미지로 변환해주는 오픈소스입니다. \`\`\`html2canvas\`\`\`를 통해 일반적인 웹페이지를 스타일링 하듯이 구현한 뒤 이미지로 변환하고, 변환된 이미지를 \`\`\`jspdf\`\`\`를 통해 pdf 파일로 저장할 수 있습니다.
 
-다음 코드를 통해,
-1. 드래그 시작할 때, 드래그하는 요소의 인덱스를 데이터로 설정하고 드래그 효과를 "move"로 설정합니다.
-2. 드래그한 요소가 다른 드롭 가능한 요소 위로 이동할 때, 드롭이 가능하도록 설정합니다.
-3. 드래그한 요소를 드롭할 때, 드래그한 요소와 드롭한 요소의 인덱스를 비교하고, 다르면 move 함수를 호출하여 요소를 이동합니다.
+### 2-3) 진도율 체크 알고리즘
 
-다음 함수를 호출하여 인덱스 정보와 영상 파일 정보를 그대로 유지한 채 드래그 앤 드롭으로 순서를 변경할 수 있었습니다.
+![](/projects/hope_image_04.webp)
 
-특히 세션별로 강의 id가 같은 경우가 발생하기 때문에 강의 id를 세션 id과 강의 id를 조합하여 세션의 강의 id를 분리해주었습니다.
+진도율 체크 알고리즘을 구현하기 위해 참고할 수 있는 공유된 경험이 많지는 않았습니다. 따라서 진도율을 체크하는 알고리즘을 AI에게 물어보았고, 영상 재생 시간을 추적하는 방식에 대해서 다양한 방법을 참고할 수 있었습니다.
 
-## 2. jsPDF를 이용하여 수료증 PDF로 생성하기
+![](/projects/hope_image_05.webp)
 
-\`\`\`javascript
+저는 실시간 추적 방식과 중복된 구간을 방지한 혼합된 방식(Real-Time Tracking with Duplication Prevention Algorithm)을 이용하여 다음의 알고리즘을 구현하였고, 영상을 시청하다가 이전 위치에 되돌아가거나, 앞부분의 위치로 변경되었다면 그만큼 생략되어 중복을 방지한 추적 방식으로 구현했습니다. 즉, 최종 시청시간이 영상길이와 동일하도록 구현했습니다. 영상길이의 90% 이상을 시청했다면 해당 강의를 수강한 것으로 API를 수정하도록 구현한 방식입니다. 그리고 하나의 서비스 안에 들어있는 모든 강의를 시청해야지만 위의 수료증을 발급할 수 있도록 구현했습니다. 해당 과정을 다음 포스트에 더 자세히 설명하겠습니다.
 
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
-import { Button } from "../../components/Button";
-import "./PdfGenerator.css";
+### 2-4) 토스페이먼츠 API
 
-const generateAndDownloadPDF = async (certificate_id) => {
-  const input = document.getElementById(\`certificate-\${certificate_id}\`);
-  const pdfDPI = 300;
-  const scale = pdfDPI / 96;
-  const canvas = await html2canvas(input, {
-    scale: scale,
-    useCORS: true,
-    scrollX: 0,
-    scrollY: -window.scrollY,
-    windowWidth: input.scrollWidth,
-    windowHeight: input.scrollHeight,
-  });
+![](/projects/hope_image_06.webp)
 
-  const pdfWidth = (210 * pdfDPI) / 25.4;
-  const pdfHeight = (297 * pdfDPI) / 25.4;
+이번 프로젝트를 진행하면서 결제 시스템을 처음 도입해보았습니다. 결제 시스템을 토스 페이먼츠 API를 이용하여 구현하게 되었습니다. 결제 방식은 먼저 새로운 결제를 생성하고, 결제가 모두 정상적으로 이뤄지면, 그 뒤에 결제가 확인된 것을 API로 요청하도록 로직이 짜여져 있었습니다. 하지만 결제가 정상적으로 생성되기 이전에, 팝업 차단과 결제서비스 이용약관, 개인정보 처리 동의가 이뤄지지 않는 등의 에러가 발생하는 경우에는 결제 생성이 실패하게 됩니다. 여러 번 결제 시스템을 테스트해보면서 팝업 차단을 해제하기위해 결제 생성 이전에 팝업을 띄우고 팝업 차단 여부를 확인해 팝업 허용이 될 수 있도록 안내 모달을 띄우거나, 이용약관 동의에 대한 설명을 보여주는 모달을 보여줌으로써 다음 단계가 모두 잘 진행되도록 개선했습니다.
 
-  const pdf = new jsPDF({
-    orientation: "p",
-    unit: "pt",
-    format: [pdfWidth, pdfHeight],
-  });
-
-  const imgData = canvas.toDataURL("image/png");
-  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-
-  pdf.save("이수증서.pdf");
-};
-\`\`\`
-
-### canvas를 이미지로 변환한 뒤 PDF로 생성하기
-
-pdf를 동적으로 생성하는 방식으로는 다양한 방법이 있으나 대표적으로 jsPDF와 html2canvas를 이용하여 생성할 수 있습니다.
-
-1. html2canvas를 이용하여 html 코드로 canvas에 들어갈 파일을 생성했습니다.
-2. canvas를 이미지 파일형식으로(PNG파일) 변환시켜줍니다.
-3. 이미지 파일로 변경한 것을 그대로 PDF파일 안에 넣어서 생성합니다.
+또한 결제 중 발생할 수 있는 오류 메시지를 모두 가져와서 결제 에러 시 에러 메시지를 전달할 수 있도록 구현했습니다. 그리고 결제가 모두 잘 이뤄지거나 실패했을 경우의 콜백페이지도 구현하여 사용자가 이용하기에 불편함을 최소화시켰습니다.
 
 `,
       skills: [
@@ -291,7 +189,7 @@ pdf를 동적으로 생성하는 방식으로는 다양한 방법이 있으나 �
           name: "Zustand",
         },
         {
-          name: "React Query",
+          name: "react-hook-form",
         },
       ],
     },
@@ -305,10 +203,10 @@ pdf를 동적으로 생성하는 방식으로는 다양한 방법이 있으나 �
       skills: [
         { name: "Three.js" },
         {
-          name: "fiber",
+          name: "drei",
         },
         {
-          name: "drei",
+          name: "tailwind CSS",
         },
       ],
     },
@@ -362,9 +260,9 @@ pdf를 동적으로 생성하는 방식으로는 다양한 방법이 있으나 �
       md: `
 ## 1. 유저 스토리를 활용한 개발 방식
 
-![유저스토리](/projects/userstory.png)
+![스토리보드](/projects/userstory.png)
 
-위의 이미지처럼 모든 페이지에 대한 정보를 유저스토리에 정리하는 방식으로 개발을 진행했습니다.
+위의 이미지처럼 모든 페이지에 대한 정보를 스토리보드에 정리하는 방식으로 개발을 진행했습니다.
 웹과 관련하여 모두 정리되어 있기 때문에 어떤 개발을 해야할지 서로 명확하게 이해하고 변경에 대한 내용은 함께 참여하여
 팀원 모두가 같은 개발을 목표로 진행할 수 있었습니다.
 `
@@ -463,7 +361,7 @@ pdf를 동적으로 생성하는 방식으로는 다양한 방법이 있으나 �
                   <div className="absolute inset-0 flex items-end m-3 card-img_hover gap-1 flex-col">
                     <div
                       onClick={() => window.open(project.url, "_blank")}
-                      className="bg-black w-10 h-10 rounded-full flex justify-center items-center cursor-pointer hover:bg-gray-600"
+                      className="bg-violet-600 w-10 h-10 rounded-full flex justify-center items-center cursor-pointer hover:bg-violet-400"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -799,6 +697,12 @@ function ContactSection() {
       titleEn: "E-Book co-writer",
       desc: "ISBN-9791188786664",
       descEn: "introduce React Hook",
+    },
+    {
+      title: "네이버 부스트캠프",
+      titleEn: "NAVER BOOSTCAMP",
+      desc: "9기 베이직 수료",
+      descEn: "Certificated NAVER BOOSTCAMP 9th Basic",
     },
   ];
 
