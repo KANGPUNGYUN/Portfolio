@@ -227,7 +227,7 @@ function ProjectsSection() {
       md: `
 ## 1. 구글의 Lighthouse 측정으로 리팩토링하기
 
-![하루쓰기 리펙토링](/projects/lighthouse.png)
+![하루쓰기 리펙토링](/projects/lighthouse.webp)
 
 아래 블로그 포스트에서 하루쓰기 리팩토링 단계에서 웹 성능 23점, 접근성 27점 개선한 경험을 자세하게 작성했습니다.
 
@@ -256,7 +256,7 @@ function ProjectsSection() {
       md: `
 ## 1. 스토리보드를 활용한 개발 방식
 
-![스토리보드](/projects/userstory.png)
+![스토리보드](/projects/userstory.webp)
 
 위의 이미지처럼 모든 페이지에 대한 정보를 스토리보드에 정리하는 방식으로 개발을 진행했습니다.
 웹과 관련하여 모두 정리되어 있기 때문에 어떤 개발을 해야할지 서로 명확하게 이해하고 변경에 대한 내용은 함께 참여하여
