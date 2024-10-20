@@ -84,7 +84,7 @@ function AboutSection(props) {
         }}
       >
         <br />
-        성장 포인트를 찾고, 효율적인 업무 방식을
+        다른 사람에게 더 좋은 경험을 선사할 수 있는지
         <br />늘 고민하는 개발자입니다.
       </motion.p>
       <br />
@@ -233,7 +233,7 @@ function ProjectsSection() {
 
 [> 해당 블로그 포스트로 이동하기](https://velog.io/@kangpungyun/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81-Lighthouse%EB%A1%9C-Next.js-%EC%9B%B9-%EC%84%B1%EB%8A%A5-23%EC%A0%90-%EC%A0%91%EA%B7%BC%EC%84%B1-27%EC%A0%90-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B8%B0)
 
-`
+`,
     },
     {
       name: "풍년마켓",
@@ -261,7 +261,7 @@ function ProjectsSection() {
 위의 이미지처럼 모든 페이지에 대한 정보를 스토리보드에 정리하는 방식으로 개발을 진행했습니다.
 웹과 관련하여 모두 정리되어 있기 때문에 어떤 개발을 해야할지 서로 명확하게 이해하고 변경에 대한 내용은 함께 참여하여
 팀원 모두가 같은 개발을 목표로 진행할 수 있었습니다.
-`
+`,
     },
     {
       name: "M Stay Hotel",
@@ -327,13 +327,14 @@ function ProjectsSection() {
       <div>
         <h2 className="text-5xl font-bold">Projects</h2>
         <div className="flex mt-10 overflow-x-hidden w-[99vw]">
-          <div className="flex w-full overflow-x-scroll [&>div]:flex-shrink-0"
+          <div
+            className="flex w-full overflow-x-scroll [&>div]:flex-shrink-0"
             ref={scrollContainerRef}
             onMouseDown={onMouseDown}
             onMouseLeave={onMouseLeave}
             onMouseUp={onMouseUp}
-            onMouseMove={onMouseMove} 
-            style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}
+            onMouseMove={onMouseMove}
+            style={{ cursor: isDragging.current ? "grabbing" : "grab" }}
           >
             {projects.map((project) => (
               <Tilt
@@ -424,13 +425,13 @@ function ProjectsSection() {
             ))}
           </div>
         </div>
-      {selectedProject && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          project={selectedProject}
-        />
-      )}
+        {selectedProject && (
+          <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            project={selectedProject}
+          />
+        )}
       </div>
     </Section>
   );
@@ -733,14 +734,14 @@ function ContactSection() {
     <Section>
       <h2 className="text-5xl font-bold">Contact</h2>
       <div className="overflow-x-hidden flex w-[90vw]">
-        <div 
+        <div
           className="flex gap-[30px] flex-initial overflow-x-scroll w-full "
           ref={scrollContainerRef}
           onMouseDown={onMouseDown}
           onMouseLeave={onMouseLeave}
           onMouseUp={onMouseUp}
           onMouseMove={onMouseMove}
-          style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}
+          style={{ cursor: isDragging.current ? "grabbing" : "grab" }}
         >
           <motion.div
             className="mt-8 p-8 rounded-md w-96 max-w-full"
@@ -866,7 +867,7 @@ const Modal = ({ isOpen, onClose, project }) => {
   if (!isOpen) return null;
 
   const handleClickOutside = (e) => {
-    if (e.target.id === 'modal-background') {
+    if (e.target.id === "modal-background") {
       onClose();
     }
   };
@@ -875,9 +876,9 @@ const Modal = ({ isOpen, onClose, project }) => {
     ...materialDark,
     'pre[class*="language-"]': {
       ...materialDark['pre[class*="language-"]'],
-      overflowX: 'auto', // 가로 스크롤
-      borderRadius: '8px', // border-radius 추가
-      padding: '1em',
+      overflowX: "auto", // 가로 스크롤
+      borderRadius: "8px", // border-radius 추가
+      padding: "1em",
     },
   };
 
@@ -896,70 +897,89 @@ const Modal = ({ isOpen, onClose, project }) => {
         </button>
         <h2 className="text-2xl font-bold mb-4">{project.name}</h2>
         <p className="mb-4">{project.desc}</p>
-        {project.md ? <ReactMarkdown
-          className="prose"
-          components={{
-            h1: ({ node, ...props }) => <h1 className="text-3xl font-bold my-4" {...props} />,
-            h2: ({ node, ...props }) => <h2 className="text-2xl font-bold my-4" {...props} />,
-            h3: ({ node, ...props }) => <h3 className="text-xl font-bold my-4" {...props} />,
-            a: ({ node, ...props }) => <p className="my-2 text-sky-600 hover:underline cursor-pointer" {...props} />,
-            p: ({ node, ...props }) => <p className="my-2" {...props} />,
-            ul: ({ node, ...props }) => <ul className="list-disc list-inside my-2" {...props} />,
-            ol: ({ node, ...props }) => <ol className="list-decimal list-inside my-2" {...props} />,
-            code({ node, inline, className, children, ...props }) {
-              const match = /language-(\w+)/.exec(className || "");
-              return !inline && match ? (
-                <SyntaxHighlighter
-                  style={customStyle}
-                  language={match[1]}
-                  PreTag="div"
+        {project.md ? (
+          <ReactMarkdown
+            className="prose"
+            components={{
+              h1: ({ node, ...props }) => (
+                <h1 className="text-3xl font-bold my-4" {...props} />
+              ),
+              h2: ({ node, ...props }) => (
+                <h2 className="text-2xl font-bold my-4" {...props} />
+              ),
+              h3: ({ node, ...props }) => (
+                <h3 className="text-xl font-bold my-4" {...props} />
+              ),
+              a: ({ node, ...props }) => (
+                <p
+                  className="my-2 text-sky-600 hover:underline cursor-pointer"
                   {...props}
+                />
+              ),
+              p: ({ node, ...props }) => <p className="my-2" {...props} />,
+              ul: ({ node, ...props }) => (
+                <ul className="list-disc list-inside my-2" {...props} />
+              ),
+              ol: ({ node, ...props }) => (
+                <ol className="list-decimal list-inside my-2" {...props} />
+              ),
+              code({ node, inline, className, children, ...props }) {
+                const match = /language-(\w+)/.exec(className || "");
+                return !inline && match ? (
+                  <SyntaxHighlighter
+                    style={customStyle}
+                    language={match[1]}
+                    PreTag="div"
+                    {...props}
+                  >
+                    {String(children).replace(/\n$/, "")}
+                  </SyntaxHighlighter>
+                ) : (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                );
+              },
+              img({ node, ...props }) {
+                return (
+                  <div className="my-4">
+                    <Image
+                      src={props.src}
+                      alt={props.alt}
+                      width={800}
+                      height={600}
+                      layout="responsive"
+                      objectFit="contain"
+                    />
+                  </div>
+                );
+              },
+            }}
+          >
+            {project.md}
+          </ReactMarkdown>
+        ) : (
+          <>
+            <h3 className="text-xl font-semibold">주요 기술 스택:</h3>
+            <ul className="list-disc list-inside mb-4">
+              {project.skills.map((skill) => (
+                <li key={skill.name}>{skill.name}</li>
+              ))}
+            </ul>
+            {project.github && (
+              <div className="mt-4">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline"
                 >
-                  {String(children).replace(/\n$/, "")}
-                </SyntaxHighlighter>
-              ) : (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              );
-            },
-            img({ node, ...props }) {
-              return (
-                <div className="my-4">
-                  <Image
-                    src={props.src}
-                    alt={props.alt}
-                    width={800}
-                    height={600}
-                    layout="responsive"
-                    objectFit="contain"
-                  />
-                </div>
-              );
-            },
-          }}
-        >
-          {project.md}
-        </ReactMarkdown> : (<>
-          <h3 className="text-xl font-semibold">주요 기술 스택:</h3>
-          <ul className="list-disc list-inside mb-4">
-            {project.skills.map((skill) => (
-              <li key={skill.name}>{skill.name}</li>
-            ))}
-          </ul>
-          {project.github && (
-            <div className="mt-4">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline"
-              >
-                GitHub Repository
-              </a>
-            </div>
-          )}
-        </>)}
+                  GitHub Repository
+                </a>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
