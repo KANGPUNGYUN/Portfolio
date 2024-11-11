@@ -210,7 +210,7 @@ function ProjectsSection() {
       name: "하루쓰기",
       image: harudiary.src,
       contribute: "개인",
-      url: "https://www.harudiary.site/",
+      url: "https://www.harudiary.asia/",
       github: "https://github.com/KANGPUNGYUN/harudiary",
       desc: "하루쓰기는 일기 웹 서비스입니다. 회원가입 및 SNS 계정 로그인, 일기 쓰기/수정/삭제/조회 및 좋아요와 신고하기 등 모든 작업을 직접 구현했습니다.",
       skills: [
