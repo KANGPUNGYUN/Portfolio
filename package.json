@@ -11,6 +11,7 @@
   "dependencies": {
     "@react-three/drei": "^9.102.6",
     "@react-three/fiber": "^8.16.0",
+    "@xmldom/xmldom": "^0.9.7",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "dayjs": "^1.11.10",
@@ -26,8 +27,7 @@
     "react-markdown": "^9.0.1",
     "react-syntax-highlighter": "^15.5.0",
     "react-tilt": "^1.0.2",
-    "rss-parser": "^3.13.0",
-    "xmldom": "^0.6.0"
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",

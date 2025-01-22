@@ -444,141 +444,22 @@ function BlogSection() {
   const [pageGroups, setPageGroups] = useState([]);
   const [currentGroup, setCurrentGroup] = useState(1);
 
-  // MOCK 데이터
   useEffect(() => {
-    setPosts([
-      {
-        createdAt: "Thu, 22 Jul 2024 00:20:34 GMT",
-        title: "외주 프로젝트를 마치면서",
-        url: "https://velog.io/@kangpungyun/%EC%99%B8%EC%A3%BC-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-%EB%A7%88%EC%B9%98%EB%A9%B4%EC%84%9C",
-      },
-      {
-        createdAt: "Mon, 3 Jun 2024 19:49:11 GMT",
-        title: "[프로그래머스] 베스트앨범 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EB%B2%A0%EC%8A%A4%ED%8A%B8%EC%95%A8%EB%B2%94-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Tue, 28 May 2024 19:49:11 GMT",
-        title: "[프로그래머스] 정수삼각형 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%A0%95%EC%88%98%EC%82%BC%EA%B0%81%ED%98%95-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Wed, 22 May 2024 22:32:21 GMT",
-        title: "[프로그래머스] 전력망을 둘로 나누기 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%A0%84%EB%A0%A5%EB%A7%9D%EC%9D%84-%EB%91%98%EB%A1%9C-%EB%82%98%EB%88%84%EA%B8%B0-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Sat, 18 May 2024 23:01:53 GMT",
-        title: "[개발초기] 디자인 시스템 + AI 프롬프팅",
-        url: "https://velog.io/@kangpungyun/%EA%B0%9C%EB%B0%9C%EC%B4%88%EA%B8%B0-%EB%94%94%EC%9E%90%EC%9D%B8-%EC%8B%9C%EC%8A%A4%ED%85%9C-AI-%ED%94%84%EB%A1%AC%ED%94%84%ED%8C%85",
-      },
-      {
-        createdAt: "Tue, 07 May 2024 14:06:03 GMT",
-        title: "[알고리즘] 완전 이진 트리 순회 알고리즘",
-        url: "https://velog.io/@kangpungyun/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%99%84%EC%A0%84-%EC%9D%B4%EC%A7%84-%ED%8A%B8%EB%A6%AC-%EC%88%9C%ED%9A%8C-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98",
-      },
-      {
-        createdAt: "Mon, 08 Apr 2024 14:06:03 GMT",
-        title: "[프로그래머스] 타겟넘버 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%ED%83%80%EA%B2%9F%EB%84%98%EB%B2%84-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Tue, 02 Apr 2024 05:40:21 GMT",
-        title: "[프로그래머스] 기능개발 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EA%B8%B0%EB%8A%A5%EA%B0%9C%EB%B0%9C-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Mon, 01 Apr 2024 02:32:56 GMT",
-        title: "[프로그래머스] 완주하지 못한 선수 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%99%84%EC%A3%BC%ED%95%98%EC%A7%80-%EB%AA%BB%ED%95%9C-%EC%84%A0%EC%88%98-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Sun, 31 Mar 2024 06:52:24 GMT",
-        title: "[프로그래머스] 체육복 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%B2%B4%EC%9C%A1%EB%B3%B5-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Sun, 31 Mar 2024 04:23:05 GMT",
-        title: "[프로그래머스] 최소직사각형 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%B5%9C%EC%86%8C%EC%A7%81%EC%82%AC%EA%B0%81%ED%98%95-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Sat, 30 Mar 2024 11:19:21 GMT",
-        title: "[프로그래머스] 더 맵게 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EB%8D%94-%EB%A7%B5%EA%B2%8C-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Sat, 30 Mar 2024 02:26:16 GMT",
-        title: "[프로그래머스] K번째수 JS 풀이",
-        url: "https://velog.io/@kangpungyun/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-K%EB%B2%88%EC%A7%B8%EC%88%98-JS-%ED%92%80%EC%9D%B4",
-      },
-      {
-        createdAt: "Fri, 15 Dec 2023 13:45:49 GMT",
-        title: "[리팩토링] SOLID한 컴포넌트 만들기",
-        url: "https://velog.io/@kangpungyun/SOLID%ED%95%9C-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0",
-      },
-      {
-        createdAt: "Sun, 12 Nov 2023 14:34:32 GMT",
-        title:
-          "[리팩토링] Next.js 13로 Lighthouse 웹 성능 23점, 접근성 27점 개선하기",
-        url: "https://velog.io/@kangpungyun/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81-Lighthouse%EB%A1%9C-Next.js-%EC%9B%B9-%EC%84%B1%EB%8A%A5-23%EC%A0%90-%EC%A0%91%EA%B7%BC%EC%84%B1-27%EC%A0%90-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B8%B0",
-      },
-      {
-        createdAt: "Tue, 07 Nov 2023 11:27:34 GMT",
-        title: "[리팩토링] Lighthouse로 Next 웹 성능과 접근성 개선하기",
-        url: "https://velog.io/@kangpungyun/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81-%EC%9B%B9-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0%EC%9D%84-%EC%9C%84%ED%95%9C-Lighthouse-%EC%A7%80%ED%91%9C-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0",
-      },
-      {
-        createdAt: "Tue, 27 Jun 2023 09:44:44 GMT",
-        title: "[Algorithm] 이진 탐색 js",
-        url: "https://velog.io/@kangpungyun/Algorithm-%EC%9D%B4%EC%A7%84-%ED%83%90%EC%83%89-js",
-      },
-      {
-        createdAt: "Sun, 23 Oct 2022 16:49:09 GMT",
-        title: "FullCalendar 달력 내부 이벤트 직접 정의하기",
-        url: "https://velog.io/@kangpungyun/FullCalendar-%EB%8B%AC%EB%A0%A5-%EB%82%B4%EB%B6%80-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%A7%81%EC%A0%91-%EC%A0%95%EC%9D%98%ED%95%98%EA%B8%B0",
-      },
-      {
-        createdAt: "Thu, 27 Apr 2023 13:00:31 GMT",
-        title: "[JS] 프로토타입",
-        url: "https://velog.io/@kangpungyun/JS-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85",
-      },
-      {
-        createdAt: "Fri, 31 Mar 2023 20:24:53 GMT",
-        title: "[JS] ES6 문법",
-        url: "https://velog.io/@kangpungyun/JS-ES6-%EB%AC%B8%EB%B2%95",
-      },
-      {
-        createdAt: "Fri, 31 Mar 2023 17:28:03 GMT",
-        title: "[JS] 클래스",
-        url: "https://velog.io/@kangpungyun/JS-%ED%81%B4%EB%9E%98%EC%8A%A4",
-      },
-      {
-        createdAt: "Thu, 30 Mar 2023 15:58:12 GMT",
-        title: "[JS] 클로저",
-        url: "https://velog.io/@kangpungyun/JS-%ED%81%B4%EB%A1%9C%EC%A0%80",
-      },
-      {
-        createdAt: "Sat, 11 Mar 2023 19:19:20 GMT",
-        title: "[JS] 호이스팅",
-        url: "https://velog.io/@kangpungyun/JS-%ED%98%B8%EC%9D%B4%EC%8A%A4%ED%8C%85",
-      },
-      {
-        createdAt: "Tue, 25 Oct 2022 08:31:10 GMT",
-        title: "[JS] This란?",
-        url: "https://velog.io/@kangpungyun/JS-%EA%B0%9C%EB%85%90-This-%EC%A0%95%EB%A6%AC",
-      },
-      {
-        createdAt: "Sun, 23 Oct 2022 18:07:03 GMT",
-        title: "FullCalendar 시작하기",
-        url: "https://velog.io/@kangpungyun/FullCalendar-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0",
-      },
-      {
-        createdAt: "Sun, 23 Oct 2022 14:51:50 GMT",
-        title: "Drag&Drop 달력 구현하기",
-        url: "https://velog.io/@kangpungyun/DragDrop-%EB%8B%AC%EB%A0%A5-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0",
-      },
-    ]);
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('/api/rss');
+        if (!response.ok) {
+          throw new Error('Failed to fetch posts');
+        }
+        const data = await response.json();
+        setPosts(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        setPosts([]);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   useEffect(() => {
@@ -606,6 +487,12 @@ function BlogSection() {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('ko-KR', options);
+  };
+
   return (
     <Section>
       <div>
@@ -632,7 +519,7 @@ function BlogSection() {
               <div className="sm:text-3xl text-[18px] w-[75vw] lg:w-[620px] truncate hover:text-emerald-400 cursor-pointer">
                 {post.title}
               </div>
-              <div className="text-emerald-400">{dateView(post.createdAt)}</div>
+              <div className="text-emerald-400">{formatDate(post.createdAt)}</div>
             </div>
             <div className="flex gap-1 text-l cursor-pointer hover:text-emerald-400">
               <div className="hidden lg:block">Read More</div>
@@ -726,7 +613,7 @@ function ContactSection() {
     if (!isDragging.current) return;
     e.preventDefault();
     const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX.current) * 2; // Scroll-fast
+    const walk = (x - startX.current) * 2;
     scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
   };
 
@@ -735,7 +622,7 @@ function ContactSection() {
       <h2 className="text-5xl font-bold">Contact</h2>
       <div className="overflow-x-hidden flex w-[90vw]">
         <div
-          className="flex gap-[30px] flex-initial overflow-x-scroll w-full "
+          className="flex gap-[30px] flex-initial overflow-x-scroll w-full"
           ref={scrollContainerRef}
           onMouseDown={onMouseDown}
           onMouseLeave={onMouseLeave}
@@ -743,6 +630,7 @@ function ContactSection() {
           onMouseMove={onMouseMove}
           style={{ cursor: isDragging.current ? "grabbing" : "grab" }}
         >
+          {/* Profile Card */}
           <motion.div
             className="mt-8 p-8 rounded-md w-96 max-w-full"
             initial={{
@@ -824,8 +712,10 @@ function ContactSection() {
               </div>
             </Tilt>
           </motion.div>
+
+          {/* History Card */}
           <motion.div
-            className="mt-16 p-8 rounded-2xl bg-white/80 w-[800px] h-[70vw] max-h-[490px] text-black whitespace-nowrap"
+            className="mt-16 p-8 rounded-2xl bg-white/80 min-w-[300px] w-[800px] h-auto min-h-[490px] text-black overflow-y-auto"
             initial={{
               opacity: 0,
               x: 25,
@@ -840,22 +730,24 @@ function ContactSection() {
             }}
           >
             <h3 className="text-2xl font-bold mb-5">History</h3>
-            {history.map((history) => (
-              <div key={history.title} className="mt-3 ml-2">
-                <div className="flex">
-                  <h3 className="text-xl font-bold">{history.title}</h3>
-                  <h4 className="text-lg ml-3 text-gray-600">
-                    {history.titleEn}
-                  </h4>
+            <div className="space-y-6">
+              {history.map((history) => (
+                <div key={history.title} className="ml-2">
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-1">
+                    <h3 className="text-xl font-bold break-keep">{history.title}</h3>
+                    <h4 className="text-lg sm:ml-3 text-gray-600 break-keep">
+                      {history.titleEn}
+                    </h4>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-1 mt-1">
+                    <p className="text-lg text-gray-500 break-keep">{history.desc}</p>
+                    <span className="text-lg sm:ml-3 text-gray-400 break-keep">
+                      {history.descEn}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex">
-                  <p className="text-lg text-gray-500">{history.desc}</p>
-                  <span className="text-lg ml-3 text-gray-400">
-                    {history.descEn}
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>
