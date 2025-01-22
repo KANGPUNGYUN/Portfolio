@@ -18,7 +18,7 @@ const Loading = () => {
         role="status">
         <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)">Loading...</span>
       </div>
-      <div className="text-white text-2xl mt-8">저의 포트폴리오 웹사이트에 오신 걸 환영합니다!</div>
+      <div className="text-white text-2xl mt-8 ml-8 mr-8">저의 포트폴리오 웹사이트에 오신 걸 환영합니다!</div>
       <div className="text-white text-lg mt-2">{progress}%</div>
     </div>
   );

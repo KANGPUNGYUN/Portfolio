@@ -7,6 +7,8 @@ import {
   github,
   hopescience,
   portfolio,
+  aiclassmate,
+  culf
 } from "../../../public/projects";
 
 import { Tilt } from "react-tilt";
@@ -84,7 +86,7 @@ function AboutSection(props) {
         }}
       >
         <br />
-        다른 사람에게 더 좋은 경험을 선사할 수 있는지
+        사람들에게 더 좋은 경험을 만들어주기 위해
         <br />늘 고민하는 개발자입니다.
       </motion.p>
       <br />
@@ -134,6 +136,42 @@ function AboutSection(props) {
 
 function ProjectsSection() {
   const projects = [
+    {
+      name: "cul.f",
+      image: culf.src,
+      contribute: "외주",
+      url: "http://culf.ai/beta",
+      github: "https://github.com/fornerds/culf",
+      desc: "AI 전문 큐레이팅 채팅서비스입니다. 프론트엔드 팀장을 맡아 프론트엔드 구현 및 팀원 역할 분담 및 조율을 담당했습니다.",
+      skills: [
+        {
+          name: "React",
+        },
+        {
+          name: "React-Query",
+        },
+        {
+          name: "zustand",
+        },
+      ],
+    },
+    {
+      name: "ai classmate",
+      image: aiclassmate.src,
+      contribute: "외주",
+      desc: "학생들을 대상으로 하는 AI 디지털교과서 영상교육사이트입니다. 프론트엔드 팀장을 맡아 프론트엔드 구현 및 팀원 역할 분담 및 조율을 담당했습니다.",
+      skills: [
+        {
+          name: "React",
+        },
+        {
+          name: "Jenkins",
+        },
+        {
+          name: "vite",
+        },
+      ],
+    },
     {
       name: "희망과학심리상담센터",
       image: hopescience.src,
