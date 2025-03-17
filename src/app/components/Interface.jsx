@@ -8,7 +8,7 @@ import {
   hopescience,
   portfolio,
   aiclassmate,
-  culf
+  culf,
 } from "../../../public/projects";
 
 import { Tilt } from "react-tilt";
@@ -154,6 +154,13 @@ function ProjectsSection() {
           name: "zustand",
         },
       ],
+      md: `
+### 1) 아토믹 디자인 시스템 적용
+
+![](/projects/culf_image_01.png)
+
+디자이너와의 협업 효율성을 높이기 위해 아토믹 디자인 시스템 도입에 열정적으로 몰입했습니다. 카카오 개발 블로그 등 다양한 자료를 통해 아토믹 디자인의 원칙을 독학하고, 이를 프로젝트에 적용하는 데 집중했습니다. 버튼, 입력창 등 기본 컴포넌트부터 시작해 전체 디자인 시스템을 체계적으로 구축했고, 결과적으로 디자인 변경 시간을 크게 단축할 수 있었습니다.
+`,
     },
     {
       name: "ai classmate",
@@ -171,6 +178,12 @@ function ProjectsSection() {
           name: "vite",
         },
       ],
+      md: `
+### 1) 아토믹 디자인 시스템 적용
+
+![](/projects/ai_classmate_image_01.png)
+디자이너와의 협업 효율성을 높이기 위해 아토믹 디자인 시스템 도입에 열정적으로 몰입했습니다. 카카오 개발 블로그 등 다양한 자료를 통해 아토믹 디자인의 원칙을 독학하고, 이를 프로젝트에 적용하는 데 집중했습니다. 버튼, 입력창 등 기본 컴포넌트부터 시작해 전체 디자인 시스템을 체계적으로 구축했고, 결과적으로 디자인 변경 시간을 크게 단축할 수 있었습니다.
+`,
     },
     {
       name: "희망과학심리상담센터",
@@ -248,7 +261,7 @@ function ProjectsSection() {
       name: "하루쓰기",
       image: harudiary.src,
       contribute: "개인",
-      url: "https://www.harudiary.asia/",
+      url: "https://harudiary.asia/",
       github: "https://github.com/KANGPUNGYUN/harudiary",
       desc: "하루쓰기는 일기 웹 서비스입니다. 회원가입 및 SNS 계정 로그인, 일기 쓰기/수정/삭제/조회 및 좋아요와 신고하기 등 모든 작업을 직접 구현했습니다.",
       skills: [
@@ -485,14 +498,14 @@ function BlogSection() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('/api/rss');
+        const response = await fetch("/api/rss");
         if (!response.ok) {
-          throw new Error('Failed to fetch posts');
+          throw new Error("Failed to fetch posts");
         }
         const data = await response.json();
         setPosts(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error('Error fetching blog posts:', error);
+        console.error("Error fetching blog posts:", error);
         setPosts([]);
       }
     };
@@ -527,8 +540,8 @@ function BlogSection() {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('ko-KR', options);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return date.toLocaleDateString("ko-KR", options);
   };
 
   return (
@@ -557,7 +570,9 @@ function BlogSection() {
               <div className="sm:text-3xl text-[18px] w-[75vw] lg:w-[620px] truncate hover:text-emerald-400 cursor-pointer">
                 {post.title}
               </div>
-              <div className="text-emerald-400">{formatDate(post.createdAt)}</div>
+              <div className="text-emerald-400">
+                {formatDate(post.createdAt)}
+              </div>
             </div>
             <div className="flex gap-1 text-l cursor-pointer hover:text-emerald-400">
               <div className="hidden lg:block">Read More</div>
@@ -772,13 +787,17 @@ function ContactSection() {
               {history.map((history) => (
                 <div key={history.title} className="ml-2">
                   <div className="flex flex-col sm:flex-row sm:items-start gap-1">
-                    <h3 className="text-xl font-bold break-keep">{history.title}</h3>
+                    <h3 className="text-xl font-bold break-keep">
+                      {history.title}
+                    </h3>
                     <h4 className="text-lg sm:ml-3 text-gray-600 break-keep">
                       {history.titleEn}
                     </h4>
                   </div>
                   <div className="flex flex-col sm:flex-row sm:items-start gap-1 mt-1">
-                    <p className="text-lg text-gray-500 break-keep">{history.desc}</p>
+                    <p className="text-lg text-gray-500 break-keep">
+                      {history.desc}
+                    </p>
                     <span className="text-lg sm:ml-3 text-gray-400 break-keep">
                       {history.descEn}
                     </span>
