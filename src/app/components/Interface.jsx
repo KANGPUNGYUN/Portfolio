@@ -120,7 +120,7 @@ function AboutSection(props) {
         </p>
 
         <button
-          className="bg-sky-500 text-white py-4 px-8 rounded-lg font-bold text-lg m-4 hover:bg-sky-600"
+          className="bg-sky-700 text-white py-4 px-8 rounded-lg font-bold text-lg m-4 hover:bg-sky-600"
           onClick={() => {
             setSection(4);
           }}
